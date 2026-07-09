@@ -1,0 +1,49 @@
+# Build artefacts
+node_modules
+.next
+out
+.cache
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment & secrets — NEVER COMMIT
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+
+# Tests
+test-results/
+playwright-report/
+e2e/enterprise/.auth/
+
+# Mobile build artefacts (never push to GitHub)
+*.hprof
+*.apk
+*.aab
+mobile/release/
+mobile/android/.gradle/
+mobile/android/app/build/
+mobile/android/build/
+mobile/ios/Pods/
+mobile/.dart_tool/
+mobile/build/
+
+
+# Sprint / backup snapshots (Phase 10 — do not commit)
+*.bak
+*.bak.*
+*.sprint*.bak
+*.pre-gix.*
+node_modules/@next/swc-linux-arm64-gnu/next-swc.linux-arm64-gnu.node
+node_modules/@next/swc-linux-arm64-musl/next-swc.linux-arm64-musl.node
