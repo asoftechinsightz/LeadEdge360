@@ -1,0 +1,66 @@
+{
+  "title": "Asoftech Production Overview",
+  "uid": "asoftech-overview",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Active Tenants",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "targets": [{ "expr": "asoftech_active_tenants", "legendFormat": "tenants" }]
+    },
+    {
+      "type": "stat",
+      "title": "Active Users (24h)",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "targets": [{ "expr": "asoftech_active_users_24h", "legendFormat": "users" }]
+    },
+    {
+      "type": "stat",
+      "title": "Leads Today",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "targets": [{ "expr": "increase(asoftech_leads_created_total[24h])", "legendFormat": "leads" }]
+    },
+    {
+      "type": "stat",
+      "title": "MRR (INR)",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "targets": [{ "expr": "asoftech_mrr_inr", "legendFormat": "mrr" }]
+    },
+    {
+      "type": "graph",
+      "title": "API p95 Latency (ms)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "targets": [{ "expr": "histogram_quantile(0.95, rate(asoftech_http_request_duration_ms_bucket[5m]))" }]
+    },
+    {
+      "type": "graph",
+      "title": "Error Rate",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "targets": [{ "expr": "rate(asoftech_http_errors_total[5m])" }]
+    },
+    {
+      "type": "graph",
+      "title": "CPU %",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 12 },
+      "targets": [{ "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)" }]
+    },
+    {
+      "type": "graph",
+      "title": "Memory Used %",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 12 },
+      "targets": [{ "expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100" }]
+    },
+    {
+      "type": "graph",
+      "title": "Mongo / Redis / PM2",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 12 },
+      "targets": [
+        { "expr": "up{job=\"asoftech-app\"}", "legendFormat": "app" },
+        { "expr": "up{job=\"redis\"}", "legendFormat": "redis" }
+      ]
+    }
+  ]
+}

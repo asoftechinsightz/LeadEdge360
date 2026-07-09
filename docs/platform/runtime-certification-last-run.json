@@ -1,0 +1,42 @@
+{
+  "startedAt": "2026-06-26T13:42:51.535Z",
+  "completedAt": "2026-06-26T13:42:51.535Z",
+  "host": "http://127.0.0.1:3007/api",
+  "executionHost": "development-workstation",
+  "runtimeExecuted": false,
+  "validation": {
+    "build": "PASS",
+    "staticAnalysis": "PASS",
+    "architectureReview": "PASS",
+    "documentation": "PASS",
+    "implementation": "PASS",
+    "runtimeValidation": "NOT EXECUTED"
+  },
+  "decision": "GO PENDING RUNTIME EXECUTION",
+  "decisionReason": "Runtime environment unreachable — certification not executed (infrastructure connectivity, not an application defect)",
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 0,
+    "blocked": 1,
+    "decision": "GO PENDING RUNTIME EXECUTION"
+  },
+  "issues": [
+    {
+      "phase": "Phase1-Environment",
+      "name": "MongoDB connectivity",
+      "detail": "connect ECONNREFUSED 127.0.0.1:27017",
+      "severity": "infrastructure"
+    }
+  ],
+  "results": [
+    {
+      "phase": "Phase1-Environment",
+      "name": "MongoDB connectivity",
+      "pass": false,
+      "detail": "connect ECONNREFUSED 127.0.0.1:27017",
+      "severity": "infrastructure",
+      "infrastructure": true
+    }
+  ]
+}

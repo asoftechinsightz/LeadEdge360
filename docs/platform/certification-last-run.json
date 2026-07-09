@@ -1,0 +1,55 @@
+{
+  "startedAt": "2026-06-26T12:54:18.880Z",
+  "suites": [
+    {
+      "id": "static",
+      "script": "certification-static.mjs",
+      "status": "pass",
+      "exitCode": 0
+    },
+    {
+      "id": "foundation",
+      "status": "skipped",
+      "reason": "SKIP_RUNTIME=1"
+    },
+    {
+      "id": "tenant-isolation",
+      "status": "skipped",
+      "reason": "SKIP_RUNTIME=1"
+    },
+    {
+      "id": "agent-runtime",
+      "status": "skipped",
+      "reason": "SKIP_RUNTIME=1"
+    },
+    {
+      "id": "e2e-workflow",
+      "status": "skipped",
+      "reason": "SKIP_RUNTIME=1"
+    },
+    {
+      "id": "go-live",
+      "status": "skipped",
+      "reason": "SKIP_RUNTIME=1"
+    }
+  ],
+  "decision": "GO_PENDING_RUNTIME_EXECUTION",
+  "blockers": [
+    "Runtime certification not executed on target environment — run on VPS/UAT/production"
+  ],
+  "validation": {
+    "build": "PASS",
+    "staticAnalysis": "PASS",
+    "architectureReview": "PASS",
+    "documentation": "PASS",
+    "implementation": "PASS",
+    "runtimeValidation": "NOT EXECUTED"
+  },
+  "completedAt": "2026-06-26T12:55:21.465Z",
+  "summary": {
+    "ran": 1,
+    "passed": 1,
+    "failed": 0,
+    "decision": "GO_PENDING_RUNTIME_EXECUTION"
+  }
+}

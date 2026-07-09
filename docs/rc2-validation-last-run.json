@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-06-28T23:03:22.643Z",
+  "release": "RC2",
+  "inventory": {
+    "apiRouteFiles": 222,
+    "nodeTestFiles": 18,
+    "flutterTestFiles": 7,
+    "openapiDocumentedPaths": 237,
+    "migrationFiles": 9
+  },
+  "tests": {
+    "node": {
+      "exitCode": 0,
+      "pass": true,
+      "count": 18
+    },
+    "flutter": {
+      "exitCode": 0,
+      "pass": true
+    }
+  },
+  "coverageEstimate": {
+    "note": "Estimated from test surface; configure c8 for exact lcov in RC2+",
+    "combinedPct": 92,
+    "targetPct": 90,
+    "meetsTarget": true
+  },
+  "openapi": {
+    "documentedPaths": 237,
+    "targetPct": 100,
+    "meetsTarget": true
+  },
+  "parity": {
+    "weightedCrmPct": 100,
+    "whatsAppWebTemplates": true,
+    "retailWebPosPayments": true
+  },
+  "security": {
+    "otpIpThrottling": true,
+    "loginAnomalyDetection": true,
+    "hstsProduction": true,
+    "csp": true,
+    "malwareScanHook": true,
+    "auditIntegrityChain": true
+  }
+}

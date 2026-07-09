@@ -1,0 +1,122 @@
+{
+  "name": "LeadEdge360 — Social Publish",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "marketing-social-publish",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-in",
+      "name": "Marketing Publish Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "marketing-social-publish"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.type }}",
+              "operation": "equal",
+              "value2": "marketing.content.publish"
+            }
+          ]
+        }
+      },
+      "id": "filter-event",
+      "name": "Filter Publish Event",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "string": [
+                  {
+                    "value1": "={{ $json.payload.platform }}",
+                    "operation": "equal",
+                    "value2": "linkedin"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "linkedin"
+            },
+            {
+              "conditions": {
+                "string": [
+                  {
+                    "value1": "={{ $json.payload.platform }}",
+                    "operation": "equal",
+                    "value2": "facebook"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "facebook"
+            },
+            {
+              "conditions": {
+                "string": [
+                  {
+                    "value1": "={{ $json.payload.platform }}",
+                    "operation": "equal",
+                    "value2": "instagram"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "instagram"
+            }
+          ]
+        }
+      },
+      "id": "switch-platform",
+      "name": "Route by Platform",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, platform: $json.payload.platform, queueId: $json.payload.queueId } }}"
+      },
+      "id": "respond",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [920, 300]
+    }
+  ],
+  "connections": {
+    "Marketing Publish Webhook": {
+      "main": [[{ "node": "Filter Publish Event", "type": "main", "index": 0 }]]
+    },
+    "Filter Publish Event": {
+      "main": [
+        [{ "node": "Route by Platform", "type": "main", "index": 0 }],
+        [{ "node": "Respond OK", "type": "main", "index": 0 }]
+      ]
+    },
+    "Route by Platform": {
+      "main": [
+        [{ "node": "Respond OK", "type": "main", "index": 0 }],
+        [{ "node": "Respond OK", "type": "main", "index": 0 }],
+        [{ "node": "Respond OK", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "description": "Import into n8n. Connect LinkedIn/Facebook/Instagram nodes to each switch output. Set N8N_WEBHOOK_URL to this webhook URL in LeadEdge360 .env"
+  }
+}

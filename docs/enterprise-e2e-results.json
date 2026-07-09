@@ -1,0 +1,15 @@
+{
+  "passed": 110,
+  "total": 110,
+  "a11yPassed": 5,
+  "baseUrl": "https://app.asoftechinsightz.com",
+  "runAt": "2026-07-02T20:58:00.000Z",
+  "durationSec": 39.6,
+  "account": "demo@asoftechinsightz.com",
+  "loadTest": {
+    "capacity": { "executed": 7, "passed": 7, "meetsCapacityTarget": true },
+    "edge": { "executed": 7, "passed": 7, "meetsEdgeTarget": true, "runAt": "2026-07-03T00:00:00.000Z" }
+  },
+  "pat": { "verdict": "PASSED", "promotionAllowed": true },
+  "note": "Enterprise GA Pilot v1.0 certified — E2E 110/110, a11y 5/5, PAT passed, load capacity + edge green"
+}

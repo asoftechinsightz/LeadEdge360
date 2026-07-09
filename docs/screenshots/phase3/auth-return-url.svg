@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-label="Sign in returnUrl flow">
+  <rect width="1200" height="520" fill="#0F172A"/>
+  <text x="600" y="44" fill="#fff" font-family="system-ui" font-size="20" font-weight="600" text-anchor="middle">Post-login returnUrl (absolute paths)</text>
+  <rect x="80" y="90" width="1040" height="72" rx="10" fill="#111827" stroke="#334155"/>
+  <text x="600" y="132" fill="#1976D2" font-family="monospace" font-size="15" text-anchor="middle">/signin?returnUrl=%2Fproposals</text>
+  <path d="M600 170 V210" stroke="#FF7A00" stroke-width="2"/>
+  <polygon points="594,210 600,222 606,210" fill="#FF7A00"/>
+  <rect x="300" y="230" width="600" height="80" rx="10" fill="#111827" stroke="#334155"/>
+  <text x="600" y="265" fill="#94A3B8" font-family="system-ui" font-size="12" text-anchor="middle">Successful login</text>
+  <text x="600" y="292" fill="#fff" font-family="monospace" font-size="14" text-anchor="middle">resolveReturnUrl() � /proposals</text>
+  <path d="M600 320 V360" stroke="#FF7A00" stroke-width="2"/>
+  <polygon points="594,360 600,372 606,360" fill="#FF7A00"/>
+  <rect x="380" y="380" width="440" height="72" rx="10" fill="#071B4D" stroke="#22C55E"/>
+  <text x="600" y="424" fill="#22C55E" font-family="monospace" font-size="16" text-anchor="middle">window.location.assign('/proposals')</text>
+</svg>

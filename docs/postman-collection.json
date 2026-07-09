@@ -1,0 +1,158 @@
+{
+  "info": {
+    "name": "AsoftechInsightz LeadEdge360 — v1.0.0",
+    "description": "Postman collection — imported from /docs/openapi.json. Set the `baseUrl`, `accessToken` and `refreshToken` collection variables before running requests. Use the Login folder first to populate them automatically via the test scripts.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl",      "value": "https://qualify-leads-hub.preview.emergentagent.com/api" },
+    { "key": "accessToken",  "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "leadId",       "value": "" },
+    { "key": "followupId",   "value": "" }
+  ],
+  "auth": { "type": "bearer", "bearer": [ { "key": "token", "value": "{{accessToken}}", "type": "string" } ] },
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "url": "{{baseUrl}}/" } },
+
+    { "name": "Auth", "item": [
+      { "name": "Register", "request": { "method": "POST", "url": "{{baseUrl}}/auth/register",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw", "raw": "{\n  \"email\": \"jane@example.com\",\n  \"phone\": \"+919812345678\",\n  \"password\": \"S3cure!Pass\",\n  \"fullName\": \"Jane Doe\",\n  \"dpdpConsent\": { \"essential\": true, \"analytics\": true, \"marketing\": false }\n}" } } },
+      { "name": "Verify OTP", "request": { "method": "POST", "url": "{{baseUrl}}/auth/verify-otp",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw", "raw": "{\n  \"destination\": \"+919812345678\",\n  \"code\": \"123456\",\n  \"purpose\": \"signup\"\n}" } },
+        "event": [{
+          "listen": "test",
+          "script": { "type": "text/javascript", "exec": [
+            "if (pm.response.code === 200) {",
+            "  const j = pm.response.json();",
+            "  pm.collectionVariables.set('accessToken',  j.accessToken);",
+            "  pm.collectionVariables.set('refreshToken', j.refreshToken);",
+            "}"
+          ] }
+        }] },
+      { "name": "Login (password)", "request": { "method": "POST", "url": "{{baseUrl}}/auth/login-password",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw", "raw": "{\n  \"email\": \"admin@asoftechinsightz.com\",\n  \"password\": \"ChangeMe@2025\"\n}" } },
+        "event": [{
+          "listen": "test",
+          "script": { "type": "text/javascript", "exec": [
+            "if (pm.response.code === 200) {",
+            "  const j = pm.response.json();",
+            "  pm.collectionVariables.set('accessToken',  j.accessToken);",
+            "  pm.collectionVariables.set('refreshToken', j.refreshToken);",
+            "}"
+          ] }
+        }] },
+      { "name": "Login OTP — send", "request": { "method": "POST", "url": "{{baseUrl}}/auth/login-otp",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw", "raw": "{\n  \"phone\": \"+919812345678\"\n}" } } },
+      { "name": "Forgot password", "request": { "method": "POST", "url": "{{baseUrl}}/auth/forgot-password",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw", "raw": "{ \"destination\": \"jane@example.com\" }" } } },
+      { "name": "Reset password", "request": { "method": "POST", "url": "{{baseUrl}}/auth/reset-password",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw", "raw": "{\n  \"destination\": \"jane@example.com\",\n  \"code\": \"123456\",\n  \"newPassword\": \"N3wPass!2025\"\n}" } } },
+      { "name": "Refresh token", "request": { "method": "POST", "url": "{{baseUrl}}/auth/refresh-token",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw", "raw": "{ \"refreshToken\": \"{{refreshToken}}\" }" } } },
+      { "name": "Logout", "request": { "method": "POST", "url": "{{baseUrl}}/auth/logout" } }
+    ]},
+
+    { "name": "Users", "item": [
+      { "name": "My profile",         "request": { "method": "GET",   "url": "{{baseUrl}}/users/me" } },
+      { "name": "Update profile",     "request": { "method": "PATCH", "url": "{{baseUrl}}/users/me",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw","raw":"{ \"fullName\": \"Jane D.\", \"preferences\": { \"theme\":\"dark\" } }" } } },
+      { "name": "Change password",    "request": { "method": "POST",  "url": "{{baseUrl}}/users/change-password",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw","raw":"{ \"currentPassword\": \"ChangeMe@2025\", \"newPassword\": \"N3wPass!2025\" }" } } },
+      { "name": "My subscription",    "request": { "method": "GET",   "url": "{{baseUrl}}/users/subscription" } }
+    ]},
+
+    { "name": "Leads", "item": [
+      { "name": "List + search", "request": { "method": "GET", "url": "{{baseUrl}}/leads?page=1&pageSize=20&q=rahul&status=Qualified&label=Hot&territory=Bengaluru&sort=-createdAt" } },
+      { "name": "Create lead", "request": { "method": "POST", "url": "{{baseUrl}}/leads",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw","raw":"{\n  \"name\": \"Rahul Verma\",\n  \"phone\": \"+919812345671\",\n  \"email\": \"rahul@acme.in\",\n  \"company\": \"Acme Pharma\",\n  \"message\": \"URGENT, ready to buy, budget approved\",\n  \"source\": \"whatsapp\",\n  \"territory\": \"Bengaluru\",\n  \"budget\": 250000,\n  \"whatsappOptIn\": true\n}" } },
+        "event": [{ "listen":"test","script":{"type":"text/javascript","exec":["if (pm.response.code === 201) pm.collectionVariables.set('leadId', pm.response.json().id);"]}}] },
+      { "name": "Lead details",   "request": { "method":"GET",    "url":"{{baseUrl}}/leads/{{leadId}}" } },
+      { "name": "Update lead",    "request": { "method":"PATCH",  "url":"{{baseUrl}}/leads/{{leadId}}",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"company\":\"Acme Pharma Pvt Ltd\" }"} } },
+      { "name": "Update status",  "request": { "method":"POST",   "url":"{{baseUrl}}/leads/{{leadId}}/status",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"status\": \"Qualified\" }"} } },
+      { "name": "Assign",         "request": { "method":"POST",   "url":"{{baseUrl}}/leads/{{leadId}}/assign",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"userId\": \"<uuid>\" }"} } },
+      { "name": "Rescore",        "request": { "method":"POST",   "url":"{{baseUrl}}/leads/{{leadId}}/rescore" } },
+      { "name": "Delete",         "request": { "method":"DELETE", "url":"{{baseUrl}}/leads/{{leadId}}" } },
+      { "name": "Sources",        "request": { "method":"GET",    "url":"{{baseUrl}}/leads/sources" } }
+    ]},
+
+    { "name": "FollowUps", "item": [
+      { "name": "List",   "request": { "method":"GET",  "url":"{{baseUrl}}/followups?status=open&dueFrom=2025-06-13T00:00:00Z" } },
+      { "name": "Create", "request": { "method":"POST", "url":"{{baseUrl}}/followups",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body": { "mode":"raw","raw":"{\n  \"leadId\": \"{{leadId}}\",\n  \"title\": \"Demo call follow-up\",\n  \"dueAt\": \"2025-06-15T10:30:00+05:30\",\n  \"channel\": \"call\"\n}" },
+        "event":[{"listen":"test","script":{"type":"text/javascript","exec":["if (pm.response.code===201) pm.collectionVariables.set('followupId', pm.response.json().id);"]}}] } },
+      { "name": "Update", "request": { "method":"PATCH","url":"{{baseUrl}}/followups/{{followupId}}",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"notes\": \"Re-scheduled — customer travelling\" }"} } },
+      { "name": "Close",  "request": { "method":"POST", "url":"{{baseUrl}}/followups/{{followupId}}/close",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"outcome\": \"Demo scheduled for Friday\" }"} } },
+      { "name": "Reminders", "request": { "method":"GET", "url":"{{baseUrl}}/followups/reminders?withinHours=24" } }
+    ]},
+
+    { "name": "Dashboard", "item": [
+      { "name": "KPIs",                "request": { "method":"GET","url":"{{baseUrl}}/dashboard/kpis" } },
+      { "name": "Follow-ups due",      "request": { "method":"GET","url":"{{baseUrl}}/dashboard/followups-due" } },
+      { "name": "Revenue (30d)",       "request": { "method":"GET","url":"{{baseUrl}}/dashboard/revenue?range=30d" } },
+      { "name": "Sales performance",   "request": { "method":"GET","url":"{{baseUrl}}/dashboard/sales-performance" } }
+    ]},
+
+    { "name": "WhatsApp", "item": [
+      { "name": "Send text",     "request": { "method":"POST","url":"{{baseUrl}}/whatsapp/send",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"leadId\": \"{{leadId}}\", \"text\": \"Hi Rahul, scheduling your demo for tomorrow at 10:30 IST.\" }"} } },
+      { "name": "Send template", "request": { "method":"POST","url":"{{baseUrl}}/whatsapp/send-template",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"leadId\": \"{{leadId}}\", \"templateName\": \"leadedge_followup_v1\", \"params\": [\"Rahul\", \"Aarav Sharma\"] }"} } },
+      { "name": "Conversation",  "request": { "method":"GET", "url":"{{baseUrl}}/whatsapp/conversation/{{leadId}}" } }
+    ]},
+
+    { "name": "Notifications", "item": [
+      { "name": "List",            "request": { "method":"GET", "url":"{{baseUrl}}/notifications?unreadOnly=true" } },
+      { "name": "Mark read",       "request": { "method":"POST","url":"{{baseUrl}}/notifications/<id>/read" } },
+      { "name": "Register device", "request": { "method":"POST","url":"{{baseUrl}}/notifications/devices",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"platform\": \"android\", \"token\": \"<fcm-token>\", \"deviceName\": \"Pixel 8\" }"} } },
+      { "name": "Settings GET",    "request": { "method":"GET",  "url":"{{baseUrl}}/notifications/settings" } },
+      { "name": "Settings PATCH",  "request": { "method":"PATCH","url":"{{baseUrl}}/notifications/settings",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"push\": true, \"email\": true, \"whatsapp\": false }"} } }
+    ]},
+
+    { "name": "Admin", "item": [
+      { "name": "List users",         "request": { "method":"GET", "url":"{{baseUrl}}/admin/users" } },
+      { "name": "Invite user",        "request": { "method":"POST","url":"{{baseUrl}}/admin/users",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"email\": \"agent@asoftechinsightz.com\", \"role\": \"agent\", \"fullName\": \"Agent One\" }"} } },
+      { "name": "Update user",        "request": { "method":"PATCH","url":"{{baseUrl}}/admin/users/<id>",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"role\":\"manager\" }"} } },
+      { "name": "List roles",         "request": { "method":"GET", "url":"{{baseUrl}}/admin/roles" } },
+      { "name": "Subscriptions",      "request": { "method":"GET", "url":"{{baseUrl}}/admin/subscriptions" } },
+      { "name": "Create subscription","request": { "method":"POST","url":"{{baseUrl}}/admin/subscriptions",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"planId\": \"<plan-uuid>\" }"} } },
+      { "name": "Product access",     "request": { "method":"GET", "url":"{{baseUrl}}/admin/product-access" } },
+      { "name": "Toggle product",     "request": { "method":"POST","url":"{{baseUrl}}/admin/product-access",
+        "header":[{"key":"Content-Type","value":"application/json"}],
+        "body":{"mode":"raw","raw":"{ \"productCode\": \"retailedge360\", \"enabled\": true }"} } }
+    ]}
+  ]
+}

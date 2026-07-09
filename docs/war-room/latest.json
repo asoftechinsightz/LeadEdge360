@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-06-28T23:22:15.063Z",
+  "snapshotId": "warroom-2026-06-28T23-22-14-940Z",
+  "environment": {
+    "apiBase": "http://127.0.0.1:3000/api",
+    "publicUrl": null,
+    "deployTag": "v1.0.0-rc3-pilot"
+  },
+  "pilotGate": {
+    "patVerdict": "FAILED",
+    "promotionAllowed": false,
+    "readyForCustomers": false,
+    "recommendation": "HOLD — run npm run production:acceptance on VPS until PASSED"
+  },
+  "technical": {
+    "uptime": {
+      "status": "🔴",
+      "healthy": false,
+      "liveness": false,
+      "readiness": false,
+      "mongo": "unknown",
+      "target": "≥99.9% (measure via UptimeRobot during pilot)"
+    },
+    "apiLatency": {
+      "status": "🔴",
+      "p95Ms": 0,
+      "targetMs": 300,
+      "sample": "health/metrics probe"
+    },
+    "errorRate": {
+      "status": "🟡",
+      "value": "normal",
+      "target": "<5%",
+      "note": "Wire Prometheus asoftech_http_errors_total during pilot"
+    },
+    "database": {
+      "status": "🔴",
+      "mongo": "unknown"
+    },
+    "backup": {
+      "status": "🔴",
+      "latestArchive": null,
+      "ageHours": null,
+      "sizeBytes": null,
+      "target": "≤48h since last successful backup"
+    },
+    "activeAlerts": {
+      "status": "🟢",
+      "rulesConfigured": 9,
+      "firing": "check Grafana/Prometheus on VPS"
+    },
+    "docker": {
+      "available": false,
+      "containers": []
+    }
+  },
+  "business": {
+    "newOrganizations": {
+      "value": null,
+      "period": "total active"
+    },
+    "activeUsers": {
+      "value": null,
+      "period": "24h"
+    },
+    "leadsCreated": {
+      "value": null,
+      "period": "24h"
+    },
+    "opportunitiesWon": {
+      "value": null,
+      "period": "24h"
+    },
+    "posTransactions": {
+      "value": null,
+      "period": "24h"
+    },
+    "mrrInr": {
+      "value": null,
+      "period": "active subscriptions"
+    },
+    "customerRetentionPct": null
+  },
+  "financial": {
+    "cashInBankInr": null,
+    "monthlyBurnInr": null,
+    "mrrInr": null,
+    "accountsReceivableInr": null,
+    "newContractsSigned": null
+  },
+  "products": {
+    "leadEdge360": {
+      "webSaas": "READY — pilot (100% CRM parity)",
+      "mobile": "READY — pilot sideload / internal track (point API_BASE_URL to production)"
+    },
+    "retailEdge360": {
+      "webSaas": "READY — pilot (POS cash/UPI/card on web)",
+      "mobile": "READY — pilot (barcode + Razorpay checkout)"
+    }
+  }
+}

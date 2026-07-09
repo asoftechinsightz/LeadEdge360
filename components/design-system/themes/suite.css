@@ -1,0 +1,43 @@
+/**
+ * Business Suite theme — app.asoftechinsightz.com
+ * Token source: src/design-tokens/tokens.json → themes.suite
+ */
+[data-theme='suite'] {
+  --background: 222 83% 16%;
+  --foreground: 0 0% 100%;
+  --card: 222 47% 11%;
+  --card-foreground: 0 0% 100%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 211 85% 34%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 222 40% 18%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 222 35% 20%;
+  --muted-foreground: 220 12% 68%;
+  --accent: 28 100% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 70% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 222 30% 22%;
+  --input: 222 30% 20%;
+  --ring: 207 79% 46%;
+  --radius: 0.85rem;
+  --chart-1: 28 100% 50%;
+  --chart-2: 207 79% 46%;
+  --chart-3: 211 85% 34%;
+  --chart-4: 220 12% 68%;
+  --chart-5: 222 40% 35%;
+  --brand-navy: 222 74% 15%;
+  --brand-royal: 217 100% 50%;
+  --brand-electric: 191 100% 50%;
+  --brand-orange: 28 100% 50%;
+  --brand-growth: 142 71% 45%;
+  --brand-cyan: 191 100% 50%;
+  --surface-elevated: 222 47% 13%;
+  --product-accent: 217 100% 50%;
+}
+
+[data-theme='suite'] body {
+  background-image: none;
+}

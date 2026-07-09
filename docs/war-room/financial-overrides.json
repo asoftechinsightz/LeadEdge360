@@ -1,0 +1,9 @@
+{
+  "updatedAt": null,
+  "cashInBankInr": null,
+  "monthlyBurnInr": null,
+  "accountsReceivableInr": null,
+  "newContractsSigned": null,
+  "customerRetentionPct": null,
+  "notes": "Update weekly during pilot. Do not commit real bank figures to public repos."
+}

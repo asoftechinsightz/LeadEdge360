@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-06-28T23:03:40.595Z",
+  "dependencyAudit": {
+    "critical": 0,
+    "high": 0,
+    "moderate": 0,
+    "low": 0
+  },
+  "secretScan": {
+    "hits": 0,
+    "samples": []
+  },
+  "pass": true
+}

@@ -1,0 +1,158 @@
+services:
+
+  app:
+    build:
+      context: .
+
+    container_name: asoftech-app
+
+    ports:
+      - "127.0.0.1:3000:3000"
+
+    env_file:
+      - .env
+
+    environment:
+      - MONGO_URL=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/${DB_NAME}?authSource=admin
+      - DB_NAME=${DB_NAME}
+
+    depends_on:
+      - mongo
+
+    restart: unless-stopped
+
+    read_only: true
+
+    tmpfs:
+      - /tmp
+
+    security_opt:
+      - no-new-privileges:true
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000 >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    networks:
+      - backend
+      - observability360_default
+
+  mongo:
+    image: mongo:7
+
+    container_name: asoftech-mongo
+
+    ports:
+      - "127.0.0.1:27017:27017"
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+
+    ulimits:
+      nofile:
+        soft: 64000
+        hard: 64000
+
+    volumes:
+      - mongo-data:/data/db
+
+    restart: unless-stopped
+
+    security_opt:
+      - no-new-privileges:true
+
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongosh localhost:27017/admin --quiet || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    networks:
+      - backend
+
+  # Optional cache — enable with: docker compose --profile with-redis up -d redis
+  # Set REDIS_URL=redis://redis:6379 in .env when using this profile.
+  redis:
+    image: redis:7-alpine
+    container_name: asoftech-redis
+    profiles: ["with-redis"]
+    command: redis-server --appendonly yes --appendfsync everysec
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  n8n:
+    image: n8nio/n8n:1.110.0
+
+    container_name: asoftech-n8n
+
+    ports:
+      - "127.0.0.1:5678:5678"
+
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD}
+      - GENERIC_TIMEZONE=Asia/Kolkata
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=true
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - DB_SQLITE_POOL_SIZE=2
+
+    volumes:
+      - n8n-data:/home/node/.n8n
+
+    restart: unless-stopped
+
+    security_opt:
+      - no-new-privileges:true
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    networks:
+      - backend
+
+volumes:
+  mongo-data:
+  n8n-data:
+  redis-data:
+
+networks:
+  backend:
+    driver: bridge
+  # Shared edge TLS on VPS: observability360-nginx-1 proxies to asoftech-app:3000
+  observability360_default:
+    external: true

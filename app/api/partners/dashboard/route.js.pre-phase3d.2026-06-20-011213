@@ -1,0 +1,93 @@
+export const dynamic='force-dynamic'
+
+import { NextResponse } from 'next/server'
+import { getDb } from '@/lib/mongo'
+
+export async function GET(req){
+
+ const planCode =
+   req.headers.get(
+    'x-plan-code'
+   ) || 'STARTER'
+
+ if(planCode !== 'ENTERPRISE'){
+   return NextResponse.json({
+     success:false,
+     message:
+      'Enterprise Plan Required'
+   },{status:403})
+ }
+
+ const db = await getDb()
+
+ const totalCommissionAgg =
+   await db.collection('partner_commissions')
+   .aggregate([
+     {
+       $group:{
+         _id:null,
+         total:{
+           $sum:'$commissionAmount'
+         }
+       }
+     }
+   ]).toArray()
+
+ const pendingCommissionAgg =
+   await db.collection('partner_commissions')
+   .aggregate([
+     {
+       $match:{
+         status:'PENDING'
+       }
+     },
+     {
+       $group:{
+         _id:null,
+         total:{
+           $sum:'$commissionAmount'
+         }
+       }
+     }
+   ]).toArray()
+
+ const paidCommissionAgg =
+   await db.collection('partner_commissions')
+   .aggregate([
+     {
+       $match:{
+         status:'PAID'
+       }
+     },
+     {
+       $group:{
+         _id:null,
+         total:{
+           $sum:'$commissionAmount'
+         }
+       }
+     }
+   ]).toArray()
+
+ const partnerCount =
+   await db.collection('partners')
+   .countDocuments()
+
+ const activePartnerCount =
+   await db.collection('partners')
+   .countDocuments({
+     status:'ACTIVE'
+   })
+
+ return NextResponse.json({
+   success:true,
+   totalCommission:
+     totalCommissionAgg[0]?.total || 0,
+   pendingCommission:
+     pendingCommissionAgg[0]?.total || 0,
+   paidCommission:
+     paidCommissionAgg[0]?.total || 0,
+   partnerCount,
+   activePartnerCount
+ })
+}

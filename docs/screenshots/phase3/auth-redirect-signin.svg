@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-label="Suite auth redirect to absolute signin path">
+  <rect width="1200" height="640" fill="#0F172A"/>
+  <text x="600" y="48" fill="#fff" font-family="system-ui" font-size="22" font-weight="600" text-anchor="middle">Phase 3 Auth Redirect Verification</text>
+  <!-- Step 1 -->
+  <rect x="60" y="100" width="320" height="120" rx="12" fill="#111827" stroke="#334155"/>
+  <text x="220" y="135" fill="#94A3B8" font-family="system-ui" font-size="12" text-anchor="middle">Step 1  Unauthenticated</text>
+  <text x="220" y="170" fill="#fff" font-family="monospace" font-size="16" text-anchor="middle">GET /leadedge360</text>
+  <text x="220" y="198" fill="#64748B" font-family="system-ui" font-size="11" text-anchor="middle">No accessToken in localStorage</text>
+  <!-- Arrow -->
+  <path d="M390 160 H450" stroke="#FF7A00" stroke-width="2" marker-end="url(#arrow)"/>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#FF7A00"/></marker></defs>
+  <!-- Step 2 -->
+  <rect x="460" y="100" width="320" height="120" rx="12" fill="#111827" stroke="#334155"/>
+  <text x="620" y="135" fill="#94A3B8" font-family="system-ui" font-size="12" text-anchor="middle">Step 2  SuiteAuthProvider</text>
+  <text x="620" y="170" fill="#22C55E" font-family="monospace" font-size="14" text-anchor="middle">redirectToSignIn('/leadedge360')</text>
+  <text x="620" y="198" fill="#64748B" font-family="system-ui" font-size="11" text-anchor="middle">Root-absolute path only</text>
+  <!-- Arrow -->
+  <path d="M790 160 H850" stroke="#FF7A00" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- Step 3 -->
+  <rect x="860" y="100" width="280" height="120" rx="12" fill="#071B4D" stroke="#1976D2"/>
+  <text x="1000" y="135" fill="#94A3B8" font-family="system-ui" font-size="12" text-anchor="middle">Step 3  Result</text>
+  <text x="1000" y="170" fill="#fff" font-family="monospace" font-size="13" text-anchor="middle">/signin?returnUrl=%2Fleadedge360</text>
+  <text x="1000" y="198" fill="#22C55E" font-family="system-ui" font-size="11" text-anchor="middle">200 OK  not /design-system-preview/signin</text>
+  <!-- Anti-pattern -->
+  <rect x="60" y="280" width="1080" height="140" rx="12" fill="#450A0A" stroke="#EF4444"/>
+  <text x="600" y="320" fill="#FCA5A5" font-family="system-ui" font-size="14" font-weight="600" text-anchor="middle">Anti-pattern (fixed)</text>
+  <text x="600" y="355" fill="#FECACA" font-family="monospace" font-size="14" text-anchor="middle">From /design-system-preview � href="signin" � /design-system-preview/signin (404)</text>
+  <text x="600" y="390" fill="#FECACA" font-family="system-ui" font-size="13" text-anchor="middle">Fix: always use /signin via auth-routes.ts</text>
+  <!-- Routes table -->
+  <text x="60" y="470" fill="#94A3B8" font-family="system-ui" font-size="13">Protected: /leadedge360 � /retailedge360 � /proposals � /invoices � /revenue � /payments � /onboarding</text>
+  <text x="60" y="500" fill="#64748B" font-family="system-ui" font-size="12">Public: /signin � /design-system-preview � marketing routes</text>
+</svg>

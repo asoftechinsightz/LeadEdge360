@@ -1,0 +1,290 @@
+{
+  "generatedAt": "2026-06-28T23:17:04.653Z",
+  "reportId": "pat-2026-06-28T23-17-04-612Z",
+  "deploymentTag": "v1.0.0-rc3-pilot",
+  "apiBase": "http://127.0.0.1:3000/api",
+  "publicUrl": "http://localhost:3000",
+  "stage": "staging",
+  "verdict": "FAILED",
+  "promotionAllowed": false,
+  "criticalFailures": [
+    {
+      "category": "infrastructure",
+      "name": "API liveness",
+      "pass": false,
+      "critical": true,
+      "detail": "fetch failed",
+      "latencyMs": 0,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.644Z"
+    },
+    {
+      "category": "infrastructure",
+      "name": "MongoDB readiness",
+      "pass": false,
+      "critical": true,
+      "detail": "fetch failed",
+      "latencyMs": 0,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "authentication",
+      "name": "Admin credentials configured",
+      "pass": false,
+      "critical": true,
+      "detail": "set CERT_ADMIN_EMAIL/PASSWORD",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "isolation",
+      "name": "Tenant isolation suite",
+      "pass": false,
+      "critical": true,
+      "detail": "no auth token",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.648Z"
+    },
+    {
+      "category": "crm",
+      "name": "CRM workflow suite",
+      "pass": false,
+      "critical": true,
+      "detail": "no auth token",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.648Z"
+    },
+    {
+      "category": "retail",
+      "name": "Retail POS suite",
+      "pass": false,
+      "critical": true,
+      "detail": "no auth token",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.648Z"
+    },
+    {
+      "category": "system",
+      "name": "PAT runner",
+      "pass": false,
+      "critical": true,
+      "detail": "fetch failed",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.653Z"
+    }
+  ],
+  "warnings": [
+    {
+      "category": "razorpay",
+      "name": "Razorpay credentials",
+      "pass": false,
+      "critical": false,
+      "detail": "keys missing",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.648Z"
+    }
+  ],
+  "summary": {
+    "total": 18,
+    "passed": 10,
+    "failed": 8,
+    "criticalFailed": 7,
+    "warnings": 1
+  },
+  "latency": {
+    "samples": 0,
+    "p50Ms": 0,
+    "p95Ms": 0,
+    "maxMs": 0,
+    "targetP95Ms": 300
+  },
+  "checks": [
+    {
+      "category": "infrastructure",
+      "name": "API liveness",
+      "pass": false,
+      "critical": true,
+      "detail": "fetch failed",
+      "latencyMs": 0,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.644Z"
+    },
+    {
+      "category": "infrastructure",
+      "name": "MongoDB readiness",
+      "pass": false,
+      "critical": true,
+      "detail": "fetch failed",
+      "latencyMs": 0,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "infrastructure",
+      "name": "Docker containers",
+      "pass": true,
+      "critical": false,
+      "detail": "skipped (PAT_SKIP_DOCKER or Windows)",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "infrastructure",
+      "name": "Redis configured",
+      "pass": true,
+      "critical": false,
+      "detail": "optional — REDIS_URL unset",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "infrastructure",
+      "name": "Reverse proxy + SSL",
+      "pass": true,
+      "critical": false,
+      "detail": "skipped — set PUBLIC_URL=https://...",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "database",
+      "name": "Migration rollback pairs",
+      "pass": true,
+      "critical": true,
+      "detail": "4 up migrations",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "database",
+      "name": "Migration runner present",
+      "pass": true,
+      "critical": true,
+      "detail": "database/migrations/run.mjs",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "database",
+      "name": "Rollback readiness",
+      "pass": true,
+      "critical": true,
+      "detail": "every .up.mjs has matching .down.mjs",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "configuration",
+      "name": "Env MONGO_URL",
+      "pass": true,
+      "critical": true,
+      "detail": "set",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "configuration",
+      "name": "Env DB_NAME",
+      "pass": true,
+      "critical": true,
+      "detail": "set",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "configuration",
+      "name": "Env JWT_SECRET",
+      "pass": true,
+      "critical": true,
+      "detail": "set",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "configuration",
+      "name": "Upload storage directory",
+      "pass": true,
+      "critical": false,
+      "detail": "D:\\AsoftechInsightz_Project\\asoftech-insightz\\public\\uploads",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "authentication",
+      "name": "Admin credentials configured",
+      "pass": false,
+      "critical": true,
+      "detail": "set CERT_ADMIN_EMAIL/PASSWORD",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.647Z"
+    },
+    {
+      "category": "isolation",
+      "name": "Tenant isolation suite",
+      "pass": false,
+      "critical": true,
+      "detail": "no auth token",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.648Z"
+    },
+    {
+      "category": "crm",
+      "name": "CRM workflow suite",
+      "pass": false,
+      "critical": true,
+      "detail": "no auth token",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.648Z"
+    },
+    {
+      "category": "retail",
+      "name": "Retail POS suite",
+      "pass": false,
+      "critical": true,
+      "detail": "no auth token",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.648Z"
+    },
+    {
+      "category": "razorpay",
+      "name": "Razorpay credentials",
+      "pass": false,
+      "critical": false,
+      "detail": "keys missing",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.648Z"
+    },
+    {
+      "category": "system",
+      "name": "PAT runner",
+      "pass": false,
+      "critical": true,
+      "detail": "fetch failed",
+      "latencyMs": null,
+      "meta": {},
+      "time": "2026-06-28T23:17:04.653Z"
+    }
+  ]
+}

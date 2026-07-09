@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-06-28T23:03:40.744Z",
+  "framework": "OWASP Top 10 2021",
+  "checks": [
+    {
+      "id": "A01",
+      "name": "Broken Access Control",
+      "pass": true,
+      "evidence": "RBAC roles + route guards"
+    },
+    {
+      "id": "A02",
+      "name": "Cryptographic Failures",
+      "pass": true,
+      "evidence": "JWT_SECRET not default in prod"
+    },
+    {
+      "id": "A03",
+      "name": "Injection",
+      "pass": true,
+      "evidence": "Mongo driver parameterized queries"
+    },
+    {
+      "id": "A04",
+      "name": "Insecure Design",
+      "pass": true,
+      "evidence": "OTP IP throttling"
+    },
+    {
+      "id": "A05",
+      "name": "Security Misconfiguration",
+      "pass": true,
+      "evidence": "Security headers in next.config"
+    },
+    {
+      "id": "A07",
+      "name": "Identification Failures",
+      "pass": true,
+      "evidence": "JWT + refresh rotation"
+    },
+    {
+      "id": "A08",
+      "name": "Software Integrity",
+      "pass": true,
+      "evidence": "Audit hash chain"
+    },
+    {
+      "id": "A09",
+      "name": "Logging Failures",
+      "pass": true,
+      "evidence": "Audit service"
+    },
+    {
+      "id": "A05b",
+      "name": "CSP/HSTS headers",
+      "pass": true,
+      "evidence": "headers-check.mjs (strict on HTTPS prod)"
+    }
+  ],
+  "pass": true,
+  "penetrationTest": {
+    "status": "scheduled",
+    "note": "External pen test required before public GA — see docs/PEN_TEST_CHECKLIST.md"
+  }
+}

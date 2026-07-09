@@ -1,0 +1,388 @@
+{
+  "@@locale": "en",
+  "appName": "RetailEdge360",
+  "dashboard": "Dashboard",
+  "pos": "Billing",
+  "inventory": "Inventory",
+  "todaySales": "Today's Sales",
+  "totalSkus": "Total SKUs",
+  "createBill": "Create Bill",
+  "sendOffer": "Send Offer",
+  "scanSku": "Scan SKU",
+  "cash": "Cash",
+  "upi": "UPI",
+  "card": "Card",
+  "billSuccess": "Bill Successful",
+  "sendWhatsApp": "Send on WhatsApp",
+  "printBill": "Print Bill",
+  "offlinePending": "Offline - {count} bills pending",
+  "@offlinePending": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "offlineCashOnly": "Offline — cash billing only",
+  "receiptCgst": "CGST @ {rate}%",
+  "@receiptCgst": {
+    "placeholders": {
+      "rate": { "type": "String" }
+    }
+  },
+  "receiptSgst": "SGST @ {rate}%",
+  "@receiptSgst": {
+    "placeholders": {
+      "rate": { "type": "String" }
+    }
+  },
+  "receiptGstin": "GSTIN",
+  "receiptShop": "Shop",
+  "receiptPdfGenerating": "Generating PDF…",
+  "receiptPdfFailed": "Could not generate PDF: {error}",
+  "@receiptPdfFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "receiptWaSent": "Bill sent on WhatsApp",
+  "receiptEnterPhone": "Customer WhatsApp number",
+  "receiptOfflinePdf": "PDF available after bill syncs online",
+  "appTitle": "Asoftech Business Suite",
+  "navHome": "Home",
+  "navPos": "POS",
+  "navInventory": "Inventory",
+  "navProfile": "Profile",
+  "retailDashboardTitle": "Retail Command Center",
+  "retailDashboardSubtitle": "Inventory, RevenueShield AI & growth KPIs",
+  "kpiTotalSkus": "Total SKUs",
+  "kpiInventoryValue": "Inventory value",
+  "kpiAtRiskValue": "At-risk value",
+  "kpiRevenueShielded": "Revenue shielded",
+  "kpiHighRiskSkus": "High risk SKUs",
+  "openPosCheckout": "Open POS checkout",
+  "salesHistory": "Sales history",
+  "browseInventory": "Browse inventory",
+  "emptyCatalogTitle": "Set up your retail catalog",
+  "emptyCatalogSubtitle": "Add SKUs from the Inventory tab, or use Settings → Load demo data for a quick walkthrough.",
+  "highRiskSkus": "High-risk SKUs",
+  "noHighRiskSkus": "No high-risk SKUs — great shelf-life health.",
+  "retailDashboardUnavailable": "Retail dashboard unavailable",
+  "inventoryByCategory": "Inventory by category",
+  "riskDistribution": "Risk distribution",
+  "posCheckout": "POS Checkout",
+  "scanOrEnterSku": "Scan or enter SKU / barcode",
+  "scanSkuToCart": "Scan a SKU to add to cart",
+  "paymentMethod": "Payment method",
+  "total": "Total",
+  "completeSale": "Complete sale",
+  "processing": "Processing…",
+  "paymentCash": "Cash",
+  "paymentUpi": "UPI",
+  "paymentCard": "Card",
+  "scanBarcode": "Scan barcode",
+  "skuNotFound": "SKU not found: {code}",
+  "@skuNotFound": {
+    "placeholders": {
+      "code": { "type": "String" }
+    }
+  },
+  "saleCompleted": "Sale completed",
+  "checkoutFailed": "Checkout failed: {error}",
+  "@checkoutFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "paymentGatewayNotConfigured": "Payment gateway not configured — use cash",
+  "couldNotStartPayment": "Could not start payment",
+  "paymentCancelled": "Payment cancelled",
+  "salesHistoryTitle": "Sales history",
+  "noSalesYet": "No sales yet",
+  "salesError": "Error: {error}",
+  "@salesError": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "salesItemsCount": "{count} items · {method}",
+  "@salesItemsCount": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "method": { "type": "String" }
+    }
+  },
+  "inventorySearchHint": "Search SKU, name, store…",
+  "skusCount": "{count} SKUs",
+  "@skusCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "inventoryLoadError": "Could not load inventory",
+  "noSkusYet": "No SKUs yet",
+  "noSkusSubtitle": "Add your first product to track stock, pricing, and AI shelf-life risk.",
+  "removeSkuTitle": "Remove SKU?",
+  "removeSkuMessage": "Delete {name} ({sku}) from inventory?",
+  "@removeSkuMessage": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "sku": { "type": "String" }
+    }
+  },
+  "cancel": "Cancel",
+  "remove": "Remove",
+  "skuRemoved": "SKU removed",
+  "removeFailed": "Remove failed",
+  "productName": "Product name *",
+  "skuLabel": "SKU *",
+  "category": "Category",
+  "store": "Store",
+  "price": "Price (₹)",
+  "stock": "Stock",
+  "storeLabel": "Store: {name}",
+  "@storeLabel": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "stockLabel": "Stock: {count}",
+  "@stockLabel": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "priceLabel": "Price: {amount}",
+  "@priceLabel": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "predictedShelfDays": "Predicted shelf: {days} days",
+  "@predictedShelfDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "repredictAi": "Re-predict with AI",
+  "addSku": "Add SKU",
+  "addAndPredict": "Add & predict shelf-life",
+  "updatedShelfRisk": "Updated: {days}d shelf · {risk} risk",
+  "@updatedShelfRisk": {
+    "placeholders": {
+      "days": { "type": "String" },
+      "risk": { "type": "String" }
+    }
+  },
+  "createdShelfRisk": "{days}d shelf · {risk} risk",
+  "@createdShelfRisk": {
+    "placeholders": {
+      "days": { "type": "String" },
+      "risk": { "type": "String" }
+    }
+  },
+  "stockMeta": "Stock {count}",
+  "@stockMeta": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "shelfMeta": "{days}d shelf",
+  "@shelfMeta": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "repredict": "Re-predict",
+  "removeAction": "Remove",
+  "riskHigh": "High",
+  "riskMedium": "Medium",
+  "riskLow": "Low",
+  "detailCategory": "Category",
+  "detailStore": "Store",
+  "detailStock": "Stock",
+  "detailPrice": "Price",
+  "detailValue": "Value",
+  "detailRisk": "Risk",
+  "detailPredictedShelf": "Predicted shelf",
+  "revenueShield": "RevenueShield",
+  "daysUnit": "{count} days",
+  "@daysUnit": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "receiptTitle": "Bill / Receipt",
+  "receiptThankYou": "Thank you for your purchase!",
+  "receiptBillNo": "Bill No.",
+  "receiptDate": "Date",
+  "receiptPayment": "Payment",
+  "receiptItems": "Items",
+  "receiptSubtotal": "Subtotal",
+  "receiptTotal": "Grand Total",
+  "viewReceipt": "View receipt",
+  "newSale": "New sale",
+  "shareReceipt": "Share receipt",
+  "receiptQty": "Qty",
+  "receiptRate": "Rate",
+  "receiptAmount": "Amount",
+  "language": "Language",
+  "languageSubtitle": "English or Hindi for RetailEdge360",
+  "languageEnglish": "English",
+  "languageHindi": "हिंदी (Hindi)",
+  "chooseLanguage": "Choose language",
+  "profileSecurity": "Security & privacy",
+  "profileSecuritySub": "Biometric lock, legal, app info",
+  "profileNotifications": "Notifications",
+  "profileNotificationsSub": "Follow-ups, assignments & alerts",
+  "profileBilling": "Subscription & billing",
+  "profileBillingSub": "Plans, Razorpay checkout, payment history",
+  "profileWorkspace": "Workspace setup",
+  "profileWorkspaceSub": "Company, branding, team & channels",
+  "signOut": "Sign out",
+  "switchProduct": "Switch product",
+  "notifications": "Notifications",
+  "retry": "Retry",
+  "categoryDairy": "Dairy",
+  "categoryBakery": "Bakery",
+  "categoryProduce": "Produce",
+  "categoryMeat": "Meat",
+  "categoryBeverage": "Beverage",
+  "categoryPharma": "Pharma",
+  "categoryCosmetic": "Cosmetic",
+  "categoryElectronics": "Electronics",
+  "categoryHousehold": "Household",
+  "categoryOther": "Other",
+  "quickSetupTitle": "10 Minute Dukaan Setup",
+  "quickSetupSubtitle": "Get your shop billing-ready in under 10 minutes",
+  "quickSetupStepOf": "Step {current} of {total}",
+  "@quickSetupStepOf": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "quickStep1Title": "Shop details",
+  "quickStep1Hint": "दुकान की जानकारी",
+  "quickShopName": "Shop name",
+  "quickCity": "City",
+  "quickPhone": "Owner phone",
+  "quickGstin": "GSTIN (optional)",
+  "quickStep2Title": "Add products",
+  "quickStep2Hint": "सामान जोड़ें",
+  "quickScanBarcodes": "Scan 3 barcodes",
+  "quickScanBarcodesSub": "Use camera to scan product barcodes",
+  "quickKiranaTemplate": "Add kirana template",
+  "quickKiranaTemplateSub": "Seeds 20 common grocery SKUs instantly",
+  "quickScannedCount": "{count} of 3 scanned",
+  "@quickScannedCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "quickStep3Title": "Payment setup",
+  "quickStep3Hint": "भुगतान",
+  "quickUpiId": "UPI ID",
+  "quickCashOnly": "Cash only",
+  "quickCashOnlySub": "Disable UPI / card for now",
+  "quickStep4Title": "Demo bill",
+  "quickStep4Hint": "डेमो बिल",
+  "quickDemoIntro": "Create your first bill — tap the item, then complete sale",
+  "quickAddToBill": "Add to bill",
+  "quickDemoComplete": "Complete demo sale",
+  "quickStep4Required": "Complete this demo bill to continue",
+  "quickStep5Title": "Send test bill",
+  "quickStep5Hint": "टेस्ट भेजें",
+  "quickTestWaIntro": "Send a sample bill to your WhatsApp number",
+  "quickSendTestBill": "Send test bill on WhatsApp",
+  "quickFinish": "Open POS",
+  "quickNext": "Next",
+  "quickBack": "Back",
+  "quickSettingUp": "Setting up your dukaan…",
+  "quickSetupFailed": "Setup failed: {error}",
+  "@quickSetupFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "quickFieldRequired": "This field is required",
+
+  "refresh": "Refresh",
+  "quickActions": "Quick Actions",
+  "moreModules": "More Modules",
+  "openWebApp": "Open full web app",
+  "comingSoonBody": "This module is coming soon to the app. You can use it now in the full web dashboard.",
+  "fastMoving": "Fast moving",
+  "slowMoving": "Slow moving",
+
+  "aiSearchHint": "Ask AI — reorder, slow movers, profit…",
+  "aiAsk": "Ask RetailEdge AI",
+  "aiHealthScore": "Business Health",
+  "aiRecommendations": "AI RECOMMENDATIONS",
+  "aiHealthy": "Healthy",
+  "aiGood": "Good",
+  "aiNeedsAttention": "Attention",
+  "aiCritical": "Critical",
+  "aiRecoHealthy": "Your store looks healthy today.",
+  "aiRecoExpiring": "{count} items expire within 7 days — sell or return soon.",
+  "@aiRecoExpiring": { "placeholders": { "count": { "type": "int" } } },
+  "aiRecoReorder": "Reorder {name} — high demand risk.",
+  "@aiRecoReorder": { "placeholders": { "name": { "type": "String" } } },
+  "aiRecoSlow": "{name} is slow-moving — try a discount.",
+  "@aiRecoSlow": { "placeholders": { "name": { "type": "String" } } },
+  "aiQueryReorder": "Which products should I reorder today?",
+  "aiQuerySlow": "Which items are slow moving?",
+  "aiQueryProfit": "Which products have the highest profit?",
+  "aiQuerySummary": "Show today's business summary.",
+  "aiQueryExpiring": "What is expiring soon?",
+
+  "qaNewBill": "New Bill",
+  "qaNewBillSub": "POS billing",
+  "qaScan": "Scan Barcode",
+  "qaScanSub": "Bill by scanning",
+  "qaSales": "Sales",
+  "qaSalesSub": "History & receipts",
+  "qaInventory": "Inventory",
+  "qaInventorySub": "Stock & products",
+  "qaAnalytics": "Analytics",
+  "qaAnalyticsSub": "Insights & trends",
+  "qaExpiry": "Expiry",
+  "qaExpirySub": "Batches & alerts",
+  "qaProducts": "Products",
+  "qaCustomers": "Customers",
+  "qaSuppliers": "Suppliers",
+  "qaPurchases": "Purchases",
+  "qaOrders": "Orders",
+  "qaExpenses": "Expenses",
+  "qaCredit": "Credit",
+  "qaLoyalty": "Loyalty",
+  "qaReports": "Reports",
+  "qaNotifications": "Alerts",
+  "qaSettings": "Settings",
+  "qaMore": "More",
+
+  "expiryTitle": "Expiry Management",
+  "expiryTodayLabel": "Expiring Today",
+  "expiry7Days": "Next 7 Days",
+  "expiry30Days": "Next 30 Days",
+  "expiryExpired": "Expired",
+  "expiryEstLoss": "Est. Loss",
+  "expiryActiveBatches": "Active Batches",
+  "expiryReturnsPending": "Returns Pending",
+  "expiryCritical": "Critical Alerts",
+  "expiryNoCritical": "No critical alerts. You're on top of it!",
+  "expiryTopExpiring": "Top Expiring Products",
+  "expiryFefoHint": "Sorted by First-Expiry-First-Out (FEFO)",
+  "expiryNoData": "No expiry data yet. Add batch expiry dates to products.",
+  "expiryBatch": "Batch",
+  "expiryQty": "Qty",
+  "expiryToday": "Expiring today",
+  "expiryDaysLeft": "{days}d left",
+  "@expiryDaysLeft": { "placeholders": { "days": { "type": "int" } } },
+  "expiryExpiredAgo": "Expired {days}d ago",
+  "@expiryExpiredAgo": { "placeholders": { "days": { "type": "int" } } },
+  "expiryTodayChip": "{count} today",
+  "@expiryTodayChip": { "placeholders": { "count": { "type": "int" } } },
+  "expiry7Chip": "{count} in 7d",
+  "@expiry7Chip": { "placeholders": { "count": { "type": "int" } } },
+  "expiryExpiredChip": "{count} expired",
+  "@expiryExpiredChip": { "placeholders": { "count": { "type": "int" } } }
+}

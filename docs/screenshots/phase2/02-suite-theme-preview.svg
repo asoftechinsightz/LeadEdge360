@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <rect width="1440" height="900" fill="#071B4D"/>
+  <rect x="0" y="0" width="256" height="900" fill="#050F2A"/>
+  <text x="32" y="48" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#FFFFFF" font-weight="700">BUSINESS SUITE</text>
+  <rect x="24" y="80" width="208" height="36" rx="8" fill="#0D47A1"/>
+  <text x="40" y="103" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#FFFFFF">Dashboard</text>
+  <text x="40" y="148" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#94A3B8">LeadEdge360</text>
+  <text x="40" y="180" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#94A3B8">RetailEdge360</text>
+  <text x="40" y="212" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#94A3B8">Billing</text>
+  <rect x="280" y="0" width="1160" height="64" fill="#0B1220"/>
+  <text x="304" y="40" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#FFFFFF" font-weight="600">Executive Command Center</text>
+  <rect x="1240" y="18" width="120" height="32" rx="8" fill="#FF7A00"/>
+  <text x="1264" y="39" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#FFFFFF" font-weight="600">Quick Action</text>
+  <rect x="304" y="96" width="260" height="120" rx="12" fill="#0B1220" stroke="#1E3A5F"/>
+  <text x="328" y="132" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#94A3B8">MRR</text>
+  <text x="328" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="32" fill="#FFFFFF" font-weight="700">�4.2L</text>
+  <text x="328" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1976D2">+8.1%</text>
+  <rect x="584" y="96" width="260" height="120" rx="12" fill="#0B1220" stroke="#1E3A5F"/>
+  <text x="608" y="132" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#94A3B8">Open Leads</text>
+  <text x="608" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="32" fill="#FFFFFF" font-weight="700">342</text>
+  <text x="608" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1976D2">+15</text>
+  <rect x="864" y="96" width="260" height="120" rx="12" fill="#0B1220" stroke="#1E3A5F"/>
+  <text x="888" y="132" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#94A3B8">Win Rate</text>
+  <text x="888" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="32" fill="#FFFFFF" font-weight="700">31%</text>
+  <text x="888" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#F87171">-1.2%</text>
+  <rect x="1144" y="96" width="260" height="120" rx="12" fill="#0B1220" stroke="#1E3A5F"/>
+  <text x="1168" y="132" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#94A3B8">Activities</text>
+  <text x="1168" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="32" fill="#FFFFFF" font-weight="700">128</text>
+  <rect x="304" y="248" width="1100" height="380" rx="12" fill="#0B1220" stroke="#1E3A5F"/>
+  <text x="328" y="288" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#94A3B8" font-weight="600">NAME</text>
+  <text x="628" y="288" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#94A3B8" font-weight="600">STATUS</text>
+  <text x="928" y="288" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#94A3B8" font-weight="600">VALUE</text>
+  <line x1="328" y1="304" x2="1360" y2="304" stroke="#1E3A5F"/>
+  <text x="328" y="340" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#FFFFFF">Enterprise Plan</text>
+  <text x="628" y="340" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#1976D2">Active</text>
+  <text x="928" y="340" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#FFFFFF">�2.4L</text>
+  <line x1="328" y1="360" x2="1360" y2="360" stroke="#1E3A5F"/>
+  <text x="328" y="396" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#FFFFFF">Growth Plan</text>
+  <text x="628" y="396" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#FF7A00">Pending</text>
+  <text x="928" y="396" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#FFFFFF">�85K</text>
+  <text x="304" y="870" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#94A3B8">Phase 2 � Suite Theme � app.asoftechinsightz.com � #071B4D #0B1220 #0D47A1 #FF7A00</text>
+</svg>

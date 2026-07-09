@@ -1,0 +1,261 @@
+/* Premium enterprise marketing theme — bright surfaces, brand colours preserved */
+
+[data-theme='marketing'] {
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 211 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 191 100% 50%;
+  --accent-foreground: 222 47% 11%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 211 100% 50%;
+  --brand-electric: 211 100% 50%;
+  --brand-cyan: 191 100% 50%;
+  --brand-navy: 222 47% 11%;
+  --brand-surface: 0 0% 100%;
+  --brand-glass: 0 0% 100% / 0.72;
+  --brand-glow: 211 100% 50% / 0.12;
+}
+
+/* Premium marketing shell — light-first enterprise SaaS */
+.gix-premium,
+.gix-enterprise {
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --border: 214 32% 91%;
+  --brand-electric: 211 100% 50%;
+  --brand-cyan: 191 100% 50%;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+}
+
+.gix-premium .gix-hero-grid,
+.gix-enterprise .gix-hero-grid {
+  background-image:
+    linear-gradient(hsl(214 32% 91% / 0.6) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(214 32% 91% / 0.6) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 75%);
+}
+
+.gix-premium .gix-glass,
+.gix-enterprise .gix-glass {
+  background: hsl(var(--brand-glass));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid hsl(214 32% 91% / 0.9);
+  box-shadow:
+    0 1px 2px hsl(222 47% 11% / 0.04),
+    0 8px 32px hsl(211 100% 50% / 0.06);
+}
+
+.gix-premium .gix-glow,
+.gix-enterprise .gix-glow {
+  box-shadow:
+    0 0 0 1px hsl(211 100% 50% / 0.08),
+    0 12px 40px hsl(211 100% 50% / 0.12);
+}
+
+.gix-premium .gix-float,
+.gix-enterprise .gix-float {
+  animation: gix-float 6s ease-in-out infinite;
+}
+
+@keyframes gix-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gix-premium .gix-float,
+  .gix-enterprise .gix-float {
+    animation: none;
+  }
+}
+
+/* Hero ambient gradients */
+.gix-premium-hero-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 20%, hsl(211 100% 50% / 0.08), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 20% 80%, hsl(191 100% 50% / 0.06), transparent 50%),
+    linear-gradient(180deg, hsl(210 40% 99%) 0%, hsl(210 40% 97%) 50%, hsl(210 40% 98%) 100%);
+}
+
+.gix-aurora {
+  background:
+    radial-gradient(ellipse 50% 40% at 30% 20%, hsl(262 83% 58% / 0.12), transparent 50%),
+    radial-gradient(ellipse 45% 35% at 70% 60%, hsl(191 100% 50% / 0.1), transparent 45%),
+    radial-gradient(ellipse 40% 30% at 50% 90%, hsl(24 100% 50% / 0.06), transparent 40%);
+}
+
+/* Dark contrast band for final CTA sections */
+.gix-premium-dark-band {
+  background: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(222 47% 8%) 50%, hsl(222 47% 11%) 100%);
+  color: white;
+}
+
+.gix-premium-dark-band .text-muted-foreground {
+  color: hsl(215 20% 65%);
+}
+
+/* Device mockup frame */
+.gix-device-frame {
+  border-radius: 16px;
+  border: 1px solid hsl(214 32% 91%);
+  background: hsl(0 0% 100%);
+  box-shadow:
+    0 25px 50px -12px hsl(222 47% 11% / 0.15),
+    0 0 0 1px hsl(214 32% 91% / 0.5);
+  overflow: hidden;
+}
+
+.gix-device-notch {
+  height: 28px;
+  background: hsl(210 40% 96%);
+  border-bottom: 1px solid hsl(214 32% 91%);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 6px;
+}
+
+.gix-device-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(214 32% 85%);
+}
+
+.gix-device-dot:first-child { background: #ff5f57; }
+.gix-device-dot:nth-child(2) { background: #febc2e; }
+.gix-device-dot:nth-child(3) { background: #28c840; }
+
+/* Brand-aligned gradient text on premium marketing surfaces */
+.gix-premium .gradient-text,
+.gix-enterprise .gradient-text {
+  background-image: linear-gradient(135deg, #0066FF 0%, #00C6FF 55%, #0066FF 100%);
+}
+
+/* ── Premium dark marketing shell (AI SaaS homepage & marketing routes) ── */
+.gix-premium-dark {
+  --background: 222 47% 4%;
+  --foreground: 210 40% 98%;
+  --card: 222 47% 8%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222 47% 8%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 191 100% 50%;
+  --primary-foreground: 222 47% 6%;
+  --secondary: 217 32% 14%;
+  --secondary-foreground: 210 40% 96%;
+  --muted: 217 32% 14%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 191 100% 50%;
+  --accent-foreground: 210 40% 98%;
+  --border: 217 32% 17%;
+  --input: 217 32% 17%;
+  --ring: 191 100% 50%;
+  --brand-glass: 255 255 255 / 0.05;
+  color: hsl(var(--foreground));
+  background-color: #030712;
+}
+
+.gix-premium-dark .gix-glass,
+.gix-premium-dark .gix-glass-dark {
+  background: hsl(var(--brand-glass));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid hsl(0 0% 100% / 0.1);
+  box-shadow:
+    0 1px 2px hsl(0 0% 0% / 0.2),
+    0 8px 32px hsl(211 100% 50% / 0.08);
+}
+
+.gix-premium-dark .gix-hero-grid {
+  background-image:
+    linear-gradient(hsl(217 32% 17% / 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(217 32% 17% / 0.5) 1px, transparent 1px);
+}
+
+.gix-premium-dark .gix-premium-hero-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 20%, hsl(211 100% 50% / 0.12), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 20% 80%, hsl(262 83% 58% / 0.08), transparent 50%),
+    linear-gradient(180deg, #030712 0%, #050a18 50%, #030712 100%);
+}
+
+.gix-premium-dark footer {
+  background: #050a18;
+  border-color: hsl(0 0% 100% / 0.08);
+  color: hsl(var(--foreground));
+}
+
+.gix-premium-dark footer .text-muted-foreground {
+  color: hsl(215 20% 65%);
+}
+
+.gix-premium-dark .gix-device-frame {
+  border-color: hsl(0 0% 100% / 0.12);
+  background: hsl(222 47% 8%);
+  box-shadow: 0 25px 50px -12px hsl(0 0% 0% / 0.45);
+}
+
+/* Marketing content area — inherits dark shell, no light override */
+.gix-marketing-content {
+  color: hsl(var(--foreground));
+  background-color: transparent;
+}
+
+.gix-premium-dark .gradient-text {
+  background-image: linear-gradient(135deg, #a78bfa 0%, #60a5fa 45%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gix-premium-dark section {
+  border-color: hsl(0 0% 100% / 0.08);
+}
+
+.gix-premium-dark .bg-secondary\/50,
+.gix-premium-dark .bg-white\/60,
+.gix-premium-dark .bg-white\/80,
+.gix-premium-dark .bg-white {
+  background-color: hsl(217 32% 10% / 0.6) !important;
+}
+
+.gix-premium-dark .border-border,
+.gix-premium-dark .border-border\/60,
+.gix-premium-dark .border-border\/80 {
+  border-color: hsl(0 0% 100% / 0.1) !important;
+}
+
+.gix-premium-dark .text-foreground {
+  color: hsl(210 40% 98%);
+}
+
+.gix-premium-dark .glass {
+  background: hsl(0 0% 100% / 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-color: hsl(0 0% 100% / 0.1);
+}
+
+.gix-premium-dark .gix-glow {
+  box-shadow:
+    0 0 0 1px hsl(139 92 246 / 0.12),
+    0 12px 40px hsl(211 100% 50% / 0.15);
+}

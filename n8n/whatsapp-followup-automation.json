@@ -1,0 +1,60 @@
+{
+  "name": "LeadEdge360 — WhatsApp Follow-up Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "hours", "hoursInterval": 6 }] }
+      },
+      "id": "Cron",
+      "name": "Every 6 hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.ASOFTECH_API}}/api/leads?status=New",
+        "method": "GET"
+      },
+      "id": "FetchNewLeads",
+      "name": "Fetch New leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pick leads older than 4h, opted-in to WhatsApp\nconst now = Date.now();\nconst out = (items[0].json.leads || []).filter(l => l.whatsapp && (now - new Date(l.createdAt).getTime()) > 4*3600*1000);\nreturn out.map(l => ({ json: l }));"
+      },
+      "id": "FilterStale",
+      "name": "Filter stale",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "phoneNumberId": "={{$env.WA_PHONE_NUMBER_ID}}",
+        "recipientPhoneNumber": "={{$json.phone}}",
+        "messageType": "template",
+        "templateName": "leadedge_followup_v1",
+        "templateLanguageCode": "en",
+        "templateParameters": "={{ [{ type: 'text', text: $json.name }, { type: 'text', text: $json.assignedTo || 'our team' }] }}"
+      },
+      "id": "WASend",
+      "name": "WhatsApp Cloud API: send template",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [880, 300],
+      "credentials": { "whatsAppApi": "WA_CLOUD_CRED" }
+    }
+  ],
+  "connections": {
+    "Every 6 hours":     { "main": [[{ "node": "Fetch New leads", "type": "main", "index": 0 }]] },
+    "Fetch New leads":   { "main": [[{ "node": "Filter stale", "type": "main", "index": 0 }]] },
+    "Filter stale":      { "main": [[{ "node": "WhatsApp Cloud API: send template", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

@@ -1,0 +1,56 @@
+import axios from 'axios'
+
+export async function searchBusinesses({
+  keyword,
+  lat,
+  lng,
+  radiusMeters
+}) {
+
+  const key =
+    process.env.GOOGLE_PLACES_API_KEY
+
+  if (!key) {
+    throw new Error(
+      'GOOGLE_PLACES_API_KEY missing'
+    )
+  }
+
+  const url =
+    'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
+
+  const { data } =
+    await axios.get(url,{
+      params:{
+        keyword,
+        location:`${lat},${lng}`,
+        radius:radiusMeters,
+        key
+      }
+    })
+
+  return data.results || []
+}
+
+export async function getPlaceDetails(
+  placeId
+) {
+
+  const key =
+    process.env.GOOGLE_PLACES_API_KEY
+
+  const url =
+    'https://maps.googleapis.com/maps/api/place/details/json'
+
+  const { data } =
+    await axios.get(url,{
+      params:{
+        place_id: placeId,
+        fields:
+          'formatted_phone_number,website,url,business_status',
+        key
+      }
+    })
+
+  return data.result || {}
+}

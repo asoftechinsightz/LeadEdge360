@@ -1,0 +1,103 @@
+import { getScannerCollections } from '@/lib/scanner/db'
+
+const DEFAULT_LIMIT = 50
+const MAX_LIMIT = 200
+
+function sanitizePagination(query = {}) {
+  const page = Math.max(parseInt(query.page || 1, 10), 1)
+
+  const limit = Math.min(
+    Math.max(parseInt(query.limit || DEFAULT_LIMIT, 10), 1),
+    MAX_LIMIT
+  )
+
+  return {
+    page,
+    limit,
+    skip: (page - 1) * limit
+  }
+}
+
+export async function listScannerResults(orgId, query = {}) {
+  if (!orgId) {
+    throw new Error('orgId required')
+  }
+
+  const { results } = await getScannerCollections()
+
+  const { page, limit, skip } = sanitizePagination(query)
+
+  const filter = { orgId }
+
+  const [items, total] = await Promise.all([
+    results.find(
+      filter,
+      {
+        projection: {
+          _id: 0
+        }
+      }
+    )
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .toArray(),
+
+    results.countDocuments(filter)
+  ])
+
+  return {
+    success: true,
+    page,
+    limit,
+    total,
+    pages: Math.ceil(total / limit),
+    items
+  }
+}
+
+export async function listScannerResultsByJob(orgId, jobId, query = {}) {
+  if (!orgId) {
+    throw new Error('orgId required')
+  }
+
+  if (!jobId) {
+    throw new Error('jobId required')
+  }
+
+  const { results } = await getScannerCollections()
+
+  const { page, limit, skip } = sanitizePagination(query)
+
+  const filter = {
+    orgId,
+    jobId
+  }
+
+  const [items, total] = await Promise.all([
+    results.find(
+      filter,
+      {
+        projection: {
+          _id: 0
+        }
+      }
+    )
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .toArray(),
+
+    results.countDocuments(filter)
+  ])
+
+  return {
+    success: true,
+    page,
+    limit,
+    total,
+    pages: Math.ceil(total / limit),
+    jobId,
+    items
+  }
+}

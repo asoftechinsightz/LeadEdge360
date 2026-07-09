@@ -1,0 +1,48 @@
+{
+  "name": "LeadEdge360 — Google Lead Form Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "google-leads",
+        "responseMode": "onReceived"
+      },
+      "id": "GoogleWebhook",
+      "name": "Google Ads webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Configure your Google Ads Lead Form extension to POST to this webhook.\n// Expected fields: user_column_data (array of {column_id, string_value}).\nconst body = items[0].json.body || items[0].json;\nconst arr = body.user_column_data || [];\nconst pick = (id) => (arr.find(x => x.column_id === id)?.string_value) || '';\nreturn [{ json: {\n  name: pick('FULL_NAME') || pick('NAME'),\n  email: pick('EMAIL'),\n  phone: pick('PHONE_NUMBER') || pick('PHONE'),\n  company: pick('COMPANY_NAME') || '',\n  message: pick('USER_NOTES') || '',\n  source: 'google',\n  territory: pick('CITY') || 'Bengaluru',\n  orgId: $env.ASOFTECH_ORG_ID ,\n  meta: { campaign_id: body.campaign_id, gcl_id: body.gcl_id }\n}}];"
+      },
+      "id": "NormaliseG",
+      "name": "Normalise Google lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.ASOFTECH_API}}/api/webhooks/google",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "X-Webhook-Token", "value": "={{$env.N8N_WEBHOOK_TOKEN}}" } ] }
+      },
+      "id": "POSTLead",
+      "name": "POST to AsoftechInsightz",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Google Ads webhook":  { "main": [[{ "node": "Normalise Google lead", "type": "main", "index": 0 }]] },
+    "Normalise Google lead":{ "main": [[{ "node": "POST to AsoftechInsightz", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

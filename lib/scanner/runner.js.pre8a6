@@ -1,0 +1,159 @@
+import { getScannerCollections } from '@/lib/scanner/db'
+import { geocodeLocation } from '@/lib/scanner/geocode'
+import {
+  searchBusinesses,
+  getPlaceDetails
+} from '@/lib/scanner/providers/google'
+import { buildHash } from '@/lib/scanner/dedupe'
+
+export async function runScannerJob(jobId) {
+
+  const {
+    jobs,
+    results
+  } = await getScannerCollections()
+
+  const job =
+    await jobs.findOne({ id: jobId })
+
+  if (!job) {
+    throw new Error('Job not found')
+  }
+
+  await jobs.updateOne(
+    { id: jobId },
+    {
+      $set: {
+        status: 'RUNNING',
+        startedAt: new Date().toISOString(),
+        error: null
+      }
+    }
+  )
+
+  try {
+
+    const geo =
+      await geocodeLocation(
+        job.city,
+        job.state
+      )
+
+    const businesses =
+      await searchBusinesses({
+        keyword: job.industry,
+        lat: geo.lat,
+        lng: geo.lng,
+        radiusMeters:
+          (job.radiusKm || 25) * 1000
+      })
+
+    let stored = 0
+
+    for (const place of businesses) {
+
+      const item = {
+        id:
+          place.place_id,
+
+        jobId:
+          job.id,
+
+        orgId:
+          job.orgId,
+
+        company:
+          place.name || '',
+
+        address:
+          place.vicinity || '',
+
+        city:
+          job.city,
+
+        state:
+          job.state,
+
+        phone: '',
+
+        website: '',
+
+        rating:
+          place.rating || 0,
+
+        reviews:
+          place.user_ratings_total || 0,
+
+        placeId:
+          place.place_id,
+
+        latitude:
+          place.geometry?.location?.lat,
+
+        longitude:
+          place.geometry?.location?.lng,
+
+        createdAt:
+          new Date().toISOString()
+      }
+
+      item.dedupeHash =
+        buildHash(item)
+
+      try {
+
+        await results.insertOne(item)
+
+        stored++
+
+      } catch (err) {
+
+        if (
+          err.code !== 11000
+        ) {
+          throw err
+        }
+      }
+    }
+
+    await jobs.updateOne(
+      { id: job.id },
+      {
+        $set: {
+          status: 'COMPLETED',
+          totalFound:
+            businesses.length,
+          totalStored:
+            stored,
+          completedAt:
+            new Date().toISOString()
+        }
+      }
+    )
+
+    return {
+      success: true,
+      totalFound:
+        businesses.length,
+      totalStored:
+        stored
+    }
+
+  } catch (err) {
+
+    await jobs.updateOne(
+      { id: job.id },
+      {
+        $set: {
+          status: 'FAILED',
+          error:
+            err.message,
+          completedAt:
+            new Date().toISOString()
+        }
+      }
+    )
+
+    throw err
+  }
+}

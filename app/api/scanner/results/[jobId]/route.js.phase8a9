@@ -1,0 +1,36 @@
+import { NextResponse } from 'next/server'
+import { resolveTenant } from '@/lib/tenant'
+import { listScannerResultsByJob } from '@/lib/scanner/results'
+
+export async function GET(request, { params }) {
+  try {
+    const tenant = await resolveTenant(request)
+    const { orgId } = tenant
+
+    const { searchParams } = new URL(request.url)
+
+    const data = await listScannerResultsByJob(
+      orgId,
+      params.jobId,
+      {
+        page: searchParams.get('page'),
+        limit: searchParams.get('limit')
+      }
+    )
+
+    return NextResponse.json(data)
+
+  } catch (error) {
+    console.error('scanner job results error', error)
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to load scanner job results'
+      },
+      {
+        status: 500
+      }
+    )
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-06-28T22:38:34.242Z",
+  "release": "RC1",
+  "inventory": {
+    "apiRouteFiles": 221,
+    "libModules": 202,
+    "nodeTestFiles": 10,
+    "e2eSpecs": 2,
+    "flutterTestFiles": 7,
+    "migrationFiles": 0
+  },
+  "tests": {
+    "node": {
+      "exitCode": 0,
+      "pass": true
+    },
+    "flutter": {
+      "exitCode": 0,
+      "pass": true
+    }
+  },
+  "coverageEstimate": {
+    "note": "No nyc/lcov configured — estimated from test surface area",
+    "backendPct": 28,
+    "mobilePct": 22,
+    "e2ePct": 12,
+    "combinedPct": 24,
+    "targetPct": 95,
+    "meetsTarget": false
+  },
+  "parity": {
+    "weightedCrmPct": 99.5,
+    "meets100Target": false,
+    "source": "docs/MOBILE_WEB_GAP_REPORT.md"
+  }
+}

@@ -1,0 +1,33 @@
+name: Load Test (staging)
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Staging base URL
+        required: true
+        default: 'https://staging.example.com'
+      vus:
+        description: Virtual users
+        required: false
+        default: '1000'
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run load test
+        env:
+          LOAD_TEST_BASE_URL: ${{ inputs.base_url }}
+          LOAD_TEST_VUS: ${{ inputs.vus }}
+          LOAD_TEST_DURATION_SEC: '60'
+          LOAD_TEST_TOKEN: ${{ secrets.LOAD_TEST_TOKEN }}
+        run: node scripts/load/run-load-test.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: load-test-report
+          path: docs/load-test-last-run.json

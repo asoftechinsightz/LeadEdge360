@@ -1,0 +1,17 @@
+# Caddy production template — render with envsubst on VPS.
+#   export APP_DOMAIN=app.example.com
+#   envsubst < infra/caddy/Caddyfile.template > /etc/caddy/Caddyfile
+
+{$APP_DOMAIN} {
+    encode gzip zstd
+    reverse_proxy 127.0.0.1:3000 {
+        health_uri /api/health/ready
+        health_interval 15s
+        health_timeout 5s
+        lb_policy round_robin
+    }
+    header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    header X-Content-Type-Options "nosniff"
+    header X-Frame-Options "SAMEORIGIN"
+    header Referrer-Policy "strict-origin-when-cross-origin"
+}

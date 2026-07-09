@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install & build
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+        env:
+          MONGO_URL: mongodb://127.0.0.1:27017
+          DB_NAME: asoftech_saas
+          JWT_SECRET: ci-test-jwt-secret-min-32-chars-long
+          NEXT_PUBLIC_BASE_URL: http://127.0.0.1:3000
+          NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+
+      - name: Unit tests
+        run: |
+          node --test tests/*.test.js
+
+      - name: RC2 validation summary
+        run: node scripts/rc2-validation.mjs
+
+      - name: RC3 ops validation
+        run: node scripts/rc3-validation.mjs
+
+      - name: Bootstrap Mongo & run API E2E
+        run: |
+          node scripts/mongo-bootstrap.mjs
+          yarn start -p 3000 &
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:3000/api/ && break
+            sleep 2
+          done
+          RETEST_API_BASE=http://127.0.0.1:3000/api npm run cert:e2e
+          npm run production:acceptance
+        env:
+          MONGO_URL: mongodb://127.0.0.1:27017
+          DB_NAME: asoftech_saas
+          JWT_SECRET: ci-test-jwt-secret-min-32-chars-long
+          NEXT_PUBLIC_BASE_URL: http://127.0.0.1:3000
+          NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+          CERT_ADMIN_EMAIL: admin@asoftechinsightz.com
+          CERT_ADMIN_PASSWORD: ChangeMe@2025
+          PAT_STAGE: staging
+          PAT_REQUIRE_BACKUP: '0'
+          PAT_SKIP_DOCKER: '1'
+          RETEST_API_BASE: http://127.0.0.1:3000/api
+
+      - name: Playwright smoke
+        run: |
+          npx playwright install chromium
+          npm run test:e2e
+        env:
+          E2E_BASE_URL: http://127.0.0.1:3000

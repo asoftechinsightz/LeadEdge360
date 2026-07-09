@@ -1,0 +1,81 @@
+# Production overlay — blue/green rolling deploy + optional Redis + Nginx upstream.
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   bash scripts/ops/deploy-production.sh staging|pilot|production
+#
+# Redis is optional: omit REDIS_URL or stop the redis service — app starts without it.
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: asoftech-redis
+    command: redis-server --appendonly yes --appendfsync everysec
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  app-blue:
+    extends:
+      file: docker-compose.yml
+      service: app
+    container_name: asoftech-app-blue
+    profiles: ["blue"]
+    environment:
+      - REDIS_URL=${REDIS_URL:-}
+      - DEPLOY_SLOT=blue
+    depends_on:
+      mongo:
+        condition: service_started
+
+  app-green:
+    extends:
+      file: docker-compose.yml
+      service: app
+    container_name: asoftech-app-green
+    profiles: ["green"]
+    environment:
+      - REDIS_URL=${REDIS_URL:-}
+      - DEPLOY_SLOT=green
+    depends_on:
+      mongo:
+        condition: service_started
+
+# NOTE: On VPS leadedge360, ports 80/443 are owned by observability360-nginx-1.
+# Do NOT enable the nginx service below — use docs/ops/SHARED_EDGE_NGINX.md instead.
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: asoftech-nginx
+    profiles: ["prod-nginx-unused"]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infra/nginx/asoftech-production.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./infra/nginx/upstream.conf:/etc/nginx/conf.d/upstream.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/healthz || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  redis-data:

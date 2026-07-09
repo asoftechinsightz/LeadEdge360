@@ -1,0 +1,791 @@
+{
+  "generatedAt": "2026-06-28T23:03:14.226Z",
+  "routeFiles": 222,
+  "documentedPaths": 237,
+  "paths": {
+    "/activities": [
+      "get"
+    ],
+    "/admin/roles": [
+      "get"
+    ],
+    "/agents/analytics": [
+      "get"
+    ],
+    "/agents/approval-rules": [
+      "get",
+      "post"
+    ],
+    "/agents/industry-profiles": [
+      "get",
+      "post"
+    ],
+    "/agents/marketplace": [
+      "get",
+      "post"
+    ],
+    "/agents/observability": [
+      "get"
+    ],
+    "/agents/recovery": [
+      "get",
+      "post"
+    ],
+    "/agents": [
+      "get"
+    ],
+    "/agents/scheduled/run": [
+      "post"
+    ],
+    "/agents/settings": [
+      "get",
+      "put"
+    ],
+    "/agents/tasks": [
+      "get"
+    ],
+    "/agents/tasks/{id}/approve": [
+      "post"
+    ],
+    "/agents/tasks/{id}/run": [
+      "post"
+    ],
+    "/agents/usage": [
+      "get"
+    ],
+    "/agents/worker/run": [
+      "post"
+    ],
+    "/ai/score": [
+      "post"
+    ],
+    "/ai/suggest": [
+      "post"
+    ],
+    "/analytics/campaigns": [
+      "get"
+    ],
+    "/analytics/funnel": [
+      "get"
+    ],
+    "/analytics/summary": [
+      "get"
+    ],
+    "/auth/google/callback": [
+      "get"
+    ],
+    "/auth/google": [
+      "get",
+      "post"
+    ],
+    "/auth/logout": [
+      "post"
+    ],
+    "/campaigns/analytics": [
+      "get"
+    ],
+    "/campaigns/executions": [
+      "get"
+    ],
+    "/campaigns/executions/{executionId}/messages": [
+      "get"
+    ],
+    "/campaigns/render": [
+      "post"
+    ],
+    "/campaigns": [
+      "get",
+      "post"
+    ],
+    "/campaigns/smtp/readiness": [
+      "get"
+    ],
+    "/campaigns/summary": [
+      "get"
+    ],
+    "/campaigns/{id}/activities": [
+      "get"
+    ],
+    "/campaigns/{id}/analytics": [
+      "get"
+    ],
+    "/campaigns/{id}/execute": [
+      "post"
+    ],
+    "/campaigns/{id}": [
+      "get",
+      "put",
+      "patch",
+      "delete"
+    ],
+    "/campaigns/{id}/template": [
+      "put"
+    ],
+    "/catalog": [
+      "get",
+      "post"
+    ],
+    "/crm/auto-convert": [
+      "post"
+    ],
+    "/customers/dashboard": [
+      "get"
+    ],
+    "/customers": [
+      "get",
+      "post"
+    ],
+    "/customers/{id}/activities": [
+      "get"
+    ],
+    "/customers/{id}/notes": [
+      "post"
+    ],
+    "/customers/{id}": [
+      "get",
+      "put",
+      "patch",
+      "delete"
+    ],
+    "/dashboard/invoices": [
+      "get"
+    ],
+    "/dashboard/proposals": [
+      "get"
+    ],
+    "/global-search": [
+      "get"
+    ],
+    "/growth/business-card": [
+      "get",
+      "post"
+    ],
+    "/growth/business-card/{id}/publish": [
+      "post"
+    ],
+    "/growth/business-card/{id}": [
+      "get",
+      "patch",
+      "delete"
+    ],
+    "/growth/reviews/campaigns": [
+      "get",
+      "post"
+    ],
+    "/growth/reviews/campaigns/{id}/requests": [
+      "get"
+    ],
+    "/growth/reviews/campaigns/{id}": [
+      "get",
+      "put",
+      "patch",
+      "delete"
+    ],
+    "/growth/reviews/campaigns/{id}/send": [
+      "post"
+    ],
+    "/growth/reviews/summary": [
+      "get"
+    ],
+    "/growth-audit": [
+      "get",
+      "post"
+    ],
+    "/health/live": [
+      "get"
+    ],
+    "/health/ready": [
+      "get"
+    ],
+    "/invoices": [
+      "get",
+      "post"
+    ],
+    "/invoices/{id}/duplicate": [
+      "post"
+    ],
+    "/invoices/{id}/email": [
+      "post"
+    ],
+    "/invoices/{id}/history": [
+      "get"
+    ],
+    "/invoices/{id}": [
+      "get",
+      "post",
+      "patch"
+    ],
+    "/lead-scoring/dashboard": [
+      "get"
+    ],
+    "/lead-scoring/priority": [
+      "get"
+    ],
+    "/lead-scoring/run": [
+      "post"
+    ],
+    "/leads/{id}/attachments": [
+      "get",
+      "post"
+    ],
+    "/leads/{id}/attachments/{attachmentId}": [
+      "get",
+      "delete"
+    ],
+    "/leads/{id}": [
+      "get",
+      "post",
+      "patch",
+      "delete"
+    ],
+    "/marketing/leads": [
+      "post"
+    ],
+    "/marketing-engine/agents": [
+      "get"
+    ],
+    "/marketing-engine/analytics": [
+      "get"
+    ],
+    "/marketing-engine/calendar": [
+      "get",
+      "post",
+      "patch"
+    ],
+    "/marketing-engine/config": [
+      "get",
+      "patch"
+    ],
+    "/marketing-engine/content": [
+      "get"
+    ],
+    "/marketing-engine/daily/run": [
+      "post"
+    ],
+    "/marketing-engine/leads/ingest": [
+      "post"
+    ],
+    "/marketing-engine/planner/run": [
+      "post"
+    ],
+    "/marketing-engine/publisher/run": [
+      "post"
+    ],
+    "/marketing-engine/report": [
+      "get"
+    ],
+    "/marketing-engine/research/run": [
+      "get",
+      "post"
+    ],
+    "/marketing-engine/worker/run": [
+      "post"
+    ],
+    "/media/upload": [
+      "post"
+    ],
+    "/metrics": [
+      "get"
+    ],
+    "/mobile/lead-priority": [
+      "get"
+    ],
+    "/mobile/qr/convert": [
+      "post"
+    ],
+    "/mobile/qr": [
+      "get"
+    ],
+    "/mobile/qr/scan": [
+      "post"
+    ],
+    "/mobile/qr/{id}/analytics": [
+      "get"
+    ],
+    "/mobile/reviews/submit": [
+      "post"
+    ],
+    "/mobile/reviews/summary": [
+      "get"
+    ],
+    "/notifications": [
+      "get"
+    ],
+    "/notifications/{id}/read": [
+      "post"
+    ],
+    "/onboarding/branding": [
+      "post"
+    ],
+    "/onboarding/company": [
+      "post"
+    ],
+    "/onboarding/email": [
+      "get",
+      "post"
+    ],
+    "/onboarding/progress": [
+      "get",
+      "post"
+    ],
+    "/onboarding/status": [
+      "get"
+    ],
+    "/onboarding/team": [
+      "get",
+      "post"
+    ],
+    "/onboarding/whatsapp": [
+      "get",
+      "post"
+    ],
+    "/opportunities/auto-create": [
+      "post"
+    ],
+    "/opportunities/create": [
+      "post"
+    ],
+    "/opportunities/dashboard": [
+      "get"
+    ],
+    "/opportunities/move": [
+      "post"
+    ],
+    "/opportunities/pipeline": [
+      "get"
+    ],
+    "/opportunities": [
+      "get",
+      "post"
+    ],
+    "/opportunities/update-stage": [
+      "post"
+    ],
+    "/opportunities/update-value": [
+      "post"
+    ],
+    "/opportunities/{id}/proposal": [
+      "post"
+    ],
+    "/opportunities/{id}": [
+      "get",
+      "patch",
+      "delete"
+    ],
+    "/outreach/email/send": [
+      "post"
+    ],
+    "/outreach/email/summary": [
+      "get"
+    ],
+    "/partners/commissions": [
+      "get"
+    ],
+    "/partners/dashboard": [
+      "get"
+    ],
+    "/partners/payout": [
+      "post"
+    ],
+    "/partners/referrals": [
+      "get",
+      "post"
+    ],
+    "/partners": [
+      "get",
+      "post"
+    ],
+    "/partners/{id}/approve": [
+      "post"
+    ],
+    "/partners/{id}": [
+      "get"
+    ],
+    "/payments/capture": [
+      "post"
+    ],
+    "/payments/create-order": [
+      "post"
+    ],
+    "/payments/mock": [
+      "post"
+    ],
+    "/payments/refund": [
+      "post"
+    ],
+    "/payments": [
+      "get",
+      "post"
+    ],
+    "/payments/verify": [
+      "post"
+    ],
+    "/payments/webhook": [
+      "post"
+    ],
+    "/platform/ai-ops": [
+      "get"
+    ],
+    "/platform/ai-timeline": [
+      "get"
+    ],
+    "/platform/events/analytics": [
+      "get"
+    ],
+    "/platform/events/dlq": [
+      "get"
+    ],
+    "/platform/events/dlq/{id}/ignore": [
+      "post"
+    ],
+    "/platform/events/dlq/{id}/retry": [
+      "post"
+    ],
+    "/platform/events/metrics": [
+      "get"
+    ],
+    "/platform/events/registry": [
+      "get"
+    ],
+    "/platform/events/replay": [
+      "get",
+      "post"
+    ],
+    "/platform/events": [
+      "get"
+    ],
+    "/platform/health": [
+      "get"
+    ],
+    "/portal/auth/login": [
+      "post"
+    ],
+    "/portal/auth/reset": [
+      "post"
+    ],
+    "/portal/invoices": [
+      "get"
+    ],
+    "/portal/notifications": [
+      "get"
+    ],
+    "/portal/payments": [
+      "get"
+    ],
+    "/portal/profile": [
+      "get",
+      "patch"
+    ],
+    "/portal/subscriptions": [
+      "get"
+    ],
+    "/portal/tickets": [
+      "post"
+    ],
+    "/pricing/plans": [
+      "get"
+    ],
+    "/privacy/consent": [
+      "post"
+    ],
+    "/privacy/delete-request": [
+      "post"
+    ],
+    "/privacy/export": [
+      "get"
+    ],
+    "/proposal-templates": [
+      "get",
+      "post"
+    ],
+    "/proposals/auto-generate": [
+      "post"
+    ],
+    "/proposals": [
+      "get",
+      "post"
+    ],
+    "/proposals/{id}/convert-to-invoice": [
+      "post"
+    ],
+    "/proposals/{id}/duplicate": [
+      "post"
+    ],
+    "/proposals/{id}/email": [
+      "post"
+    ],
+    "/proposals/{id}/history": [
+      "get"
+    ],
+    "/proposals/{id}/pdf": [
+      "get"
+    ],
+    "/proposals/{id}": [
+      "get",
+      "put",
+      "patch",
+      "delete"
+    ],
+    "/proposals/{id}/status": [
+      "post"
+    ],
+    "/proposals/{id}/won": [
+      "post"
+    ],
+    "/public/card/{slug}/click": [
+      "post"
+    ],
+    "/public/card/{slug}": [
+      "get"
+    ],
+    "/public/q/{code}": [
+      "get"
+    ],
+    "/public/qr/{code}": [
+      "get"
+    ],
+    "/public/review/{token}": [
+      "get",
+      "post"
+    ],
+    "/qr": [
+      "get",
+      "post"
+    ],
+    "/qr/summary": [
+      "get"
+    ],
+    "/qr/{id}/analytics": [
+      "get"
+    ],
+    "/qr/{id}/convert": [
+      "post"
+    ],
+    "/qr/{id}/image": [
+      "get"
+    ],
+    "/qr/{id}": [
+      "get",
+      "put",
+      "patch",
+      "delete"
+    ],
+    "/recent-activities": [
+      "get"
+    ],
+    "/retail/inventory/lookup": [
+      "get"
+    ],
+    "/retail/inventory": [
+      "get",
+      "post"
+    ],
+    "/retail/inventory/{id}/repredict": [
+      "post"
+    ],
+    "/retail/inventory/{id}": [
+      "delete"
+    ],
+    "/retail/kpis": [
+      "get"
+    ],
+    "/retail/pos/checkout": [
+      "post"
+    ],
+    "/retail/pos/payment-order": [
+      "post"
+    ],
+    "/retail/sales": [
+      "get"
+    ],
+    "/retail/stores": [
+      "get"
+    ],
+    "/revenue/admin-dashboard": [
+      "get"
+    ],
+    "/revenue/by-customer": [
+      "get"
+    ],
+    "/revenue/by-product": [
+      "get"
+    ],
+    "/revenue/by-source": [
+      "get"
+    ],
+    "/revenue/dashboard": [
+      "get"
+    ],
+    "/revenue/export": [
+      "get"
+    ],
+    "/revenue/forecast": [
+      "get"
+    ],
+    "/revenue/metrics": [
+      "get"
+    ],
+    "/revenue": [
+      "get",
+      "post"
+    ],
+    "/revenue/summary": [
+      "get"
+    ],
+    "/revenue/trends": [
+      "get"
+    ],
+    "/sales/leads/bulk-workflow": [
+      "post"
+    ],
+    "/sales/leads": [
+      "get"
+    ],
+    "/sales/priority": [
+      "get"
+    ],
+    "/sales/queue": [
+      "get"
+    ],
+    "/sales/workload": [
+      "get"
+    ],
+    "/scanner/auto/{resultId}": [
+      "post"
+    ],
+    "/scanner/convert/{resultId}": [
+      "post"
+    ],
+    "/scanner/jobs": [
+      "get",
+      "post"
+    ],
+    "/scanner/jobs/{jobId}": [
+      "get",
+      "post"
+    ],
+    "/scanner/pincode/{pin}": [
+      "get"
+    ],
+    "/scanner/readiness": [
+      "get"
+    ],
+    "/scanner/results": [
+      "get"
+    ],
+    "/scanner/results/{jobId}": [
+      "get"
+    ],
+    "/scanner/summary": [
+      "get"
+    ],
+    "/settings/branding": [
+      "get",
+      "put"
+    ],
+    "/subscriptions/create": [
+      "post"
+    ],
+    "/subscriptions/metrics": [
+      "get"
+    ],
+    "/subscriptions": [
+      "get",
+      "post"
+    ],
+    "/subscriptions/{id}/actions": [
+      "post"
+    ],
+    "/subscriptions/{id}": [
+      "get",
+      "patch",
+      "delete"
+    ],
+    "/templates/email": [
+      "get",
+      "post"
+    ],
+    "/templates/email/summary": [
+      "get"
+    ],
+    "/templates/email/{id}": [
+      "get",
+      "put",
+      "delete"
+    ],
+    "/territories": [
+      "get",
+      "post"
+    ],
+    "/territories/{id}": [
+      "patch"
+    ],
+    "/users/features": [
+      "get"
+    ],
+    "/whatsapp/templates": [
+      "get"
+    ],
+    "/whatsapp/threads": [
+      "get",
+      "post"
+    ],
+    "/whatsapp/threads/{id}/messages": [
+      "get",
+      "post"
+    ],
+    "/whatsapp/threads/{id}": [
+      "get"
+    ],
+    "/auth/login-password": [
+      "post"
+    ],
+    "/auth/login-otp": [
+      "post"
+    ],
+    "/auth/refresh-token": [
+      "post"
+    ],
+    "/auth/register": [
+      "post"
+    ],
+    "/auth/forgot-password": [
+      "post"
+    ],
+    "/auth/reset-password": [
+      "post"
+    ],
+    "/billing/plans": [
+      "get"
+    ],
+    "/billing/checkout": [
+      "post"
+    ],
+    "/billing/verify": [
+      "post"
+    ],
+    "/webhooks/razorpay": [
+      "post"
+    ],
+    "/mobile/home": [
+      "get"
+    ],
+    "/mobile/summary": [
+      "get"
+    ],
+    "/whatsapp/send-template": [
+      "post"
+    ],
+    "/leads/{id}/notes": [
+      "get",
+      "post"
+    ],
+    "/leads/{id}/timeline": [
+      "get"
+    ],
+    "/leads/{id}/tasks": [
+      "get",
+      "post"
+    ]
+  }
+}

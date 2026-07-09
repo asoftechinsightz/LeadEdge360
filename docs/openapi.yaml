@@ -1,0 +1,2056 @@
+openapi: 3.0.3
+info:
+  title: AsoftechInsightz Business Suite API
+  version: 1.0.0
+  description: |
+    API-first contract for LeadEdge360, RetailEdge360, and shared Business Suite services.
+    Sprint 0 skeleton — expand per module in Sprints 1–6.
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development
+  - url: https://app.asoftechinsightz.com/api
+    description: Production
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+    PaginatedList:
+      type: object
+      properties:
+        items:
+          type: array
+          items: {}
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+
+paths:
+  /health/live:
+    get:
+      summary: Liveness probe
+      security: []
+      responses:
+        '200':
+          description: OK
+
+  /health/ready:
+    get:
+      summary: Readiness probe (MongoDB ping)
+      security: []
+      responses:
+        '200':
+          description: Ready
+
+  /auth/login-password:
+    post:
+      summary: Password login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: JWT tokens issued
+        '401':
+          description: Invalid credentials
+
+  /leads:
+    get:
+      summary: List leads (tenant-scoped)
+      responses:
+        '200':
+          description: Lead list
+    post:
+      summary: Create lead
+      responses:
+        '201':
+          description: Created
+
+  /opportunities:
+    get:
+      summary: List opportunities
+      responses:
+        '200':
+          description: OK
+
+  /proposals:
+    get:
+      summary: List proposals
+      responses:
+        '200':
+          description: OK
+
+  /revenue/dashboard:
+    get:
+      summary: Revenue dashboard KPIs
+      responses:
+        '200':
+          description: OK
+
+  /analytics/summary:
+    get:
+      summary: Tenant-scoped analytics summary (Sprint 0)
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+
+  /growth/business-card:
+    get:
+      summary: List business cards (Sprint 1)
+      tags: [Growth]
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Plan or feature not allowed
+    post:
+      summary: Create business card (Sprint 1)
+      tags: [Growth]
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Validation error
+
+  /public/card/{slug}:
+    get:
+      summary: Public business card JSON (Sprint 1)
+      security: []
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Public card profile
+
+  /qr:
+    get:
+      summary: List QR codes (Sprint 2)
+      tags: [QR]
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create QR code (Sprint 2)
+      tags: [QR]
+      responses:
+        '201':
+          description: Created
+
+  /public/qr/{code}:
+    get:
+      summary: Public QR redirect + track (alias)
+      security: []
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to target
+        '200':
+          description: JSON when format=json
+        '429':
+          description: Rate limited
+
+  /public/q/{code}:
+    get:
+      summary: Public QR redirect + track (canonical)
+      security: []
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to target
+        '200':
+          description: JSON when format=json
+        '429':
+          description: Rate limited
+
+  /qr/summary:
+    get:
+      summary: Org QR dashboard summary (Sprint 2)
+      tags: [QR]
+      responses:
+        '200':
+          description: OK
+
+  /qr/{id}/convert:
+    post:
+      summary: Record QR conversion (Sprint 2)
+      tags: [QR]
+      responses:
+        '200':
+          description: OK
+
+  /mobile/qr:
+    get:
+      summary: Mobile QR list (Sprint 2)
+      tags: [QR]
+      responses:
+        '200':
+          description: OK
+
+  /mobile/qr/scan:
+    post:
+      summary: Mobile QR scan (Sprint 2)
+      tags: [QR]
+      responses:
+        '200':
+          description: OK
+
+  /mobile/qr/convert:
+    post:
+      summary: Mobile QR conversion (Sprint 2)
+      tags: [QR]
+      responses:
+        '200':
+          description: OK
+
+  /users/features:
+    get:
+      summary: Org plan features for UI gating (Sprint 2)
+      tags: [Auth]
+      responses:
+        '200':
+          description: OK
+
+tags:
+  - name: Auth
+  - name: CRM
+  - name: Growth
+  - name: QR
+  - name: Reviews
+  - name: AI
+  - name: Retail
+
+# RC2_GENERATED_PATHS
+  /activities:
+    get:
+      summary: /activities
+      responses:
+        '200':
+          description: OK
+  /admin/roles:
+    get:
+      summary: /admin/roles
+      responses:
+        '200':
+          description: OK
+  /agents:
+    get:
+      summary: /agents
+      responses:
+        '200':
+          description: OK
+  /agents/analytics:
+    get:
+      summary: /agents/analytics
+      responses:
+        '200':
+          description: OK
+  /agents/approval-rules:
+    get:
+      summary: /agents/approval-rules
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /agents/approval-rules
+      responses:
+        '200':
+          description: OK
+  /agents/industry-profiles:
+    get:
+      summary: /agents/industry-profiles
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /agents/industry-profiles
+      responses:
+        '200':
+          description: OK
+  /agents/marketplace:
+    get:
+      summary: /agents/marketplace
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /agents/marketplace
+      responses:
+        '200':
+          description: OK
+  /agents/observability:
+    get:
+      summary: /agents/observability
+      responses:
+        '200':
+          description: OK
+  /agents/recovery:
+    get:
+      summary: /agents/recovery
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /agents/recovery
+      responses:
+        '200':
+          description: OK
+  /agents/scheduled/run:
+    post:
+      summary: /agents/scheduled/run
+      responses:
+        '200':
+          description: OK
+  /agents/settings:
+    get:
+      summary: /agents/settings
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: /agents/settings
+      responses:
+        '200':
+          description: OK
+  /agents/tasks:
+    get:
+      summary: /agents/tasks
+      responses:
+        '200':
+          description: OK
+  /agents/tasks/{id}/approve:
+    post:
+      summary: /agents/tasks/{id}/approve
+      responses:
+        '200':
+          description: OK
+  /agents/tasks/{id}/run:
+    post:
+      summary: /agents/tasks/{id}/run
+      responses:
+        '200':
+          description: OK
+  /agents/usage:
+    get:
+      summary: /agents/usage
+      responses:
+        '200':
+          description: OK
+  /agents/worker/run:
+    post:
+      summary: /agents/worker/run
+      responses:
+        '200':
+          description: OK
+  /ai/score:
+    post:
+      summary: /ai/score
+      responses:
+        '200':
+          description: OK
+  /ai/suggest:
+    post:
+      summary: /ai/suggest
+      responses:
+        '200':
+          description: OK
+  /analytics/campaigns:
+    get:
+      summary: /analytics/campaigns
+      responses:
+        '200':
+          description: OK
+  /analytics/funnel:
+    get:
+      summary: /analytics/funnel
+      responses:
+        '200':
+          description: OK
+  /analytics/summary:
+    get:
+      summary: /analytics/summary
+      responses:
+        '200':
+          description: OK
+  /auth/forgot-password:
+    post:
+      summary: /auth/forgot-password
+      responses:
+        '200':
+          description: OK
+  /auth/google:
+    get:
+      summary: /auth/google
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /auth/google
+      responses:
+        '200':
+          description: OK
+  /auth/google/callback:
+    get:
+      summary: /auth/google/callback
+      responses:
+        '200':
+          description: OK
+  /auth/login-otp:
+    post:
+      summary: /auth/login-otp
+      responses:
+        '200':
+          description: OK
+  /auth/login-password:
+    post:
+      summary: /auth/login-password
+      responses:
+        '200':
+          description: OK
+  /auth/logout:
+    post:
+      summary: /auth/logout
+      responses:
+        '200':
+          description: OK
+  /auth/refresh-token:
+    post:
+      summary: /auth/refresh-token
+      responses:
+        '200':
+          description: OK
+  /auth/register:
+    post:
+      summary: /auth/register
+      responses:
+        '200':
+          description: OK
+  /auth/reset-password:
+    post:
+      summary: /auth/reset-password
+      responses:
+        '200':
+          description: OK
+  /billing/checkout:
+    post:
+      summary: /billing/checkout
+      responses:
+        '200':
+          description: OK
+  /billing/plans:
+    get:
+      summary: /billing/plans
+      responses:
+        '200':
+          description: OK
+  /billing/verify:
+    post:
+      summary: /billing/verify
+      responses:
+        '200':
+          description: OK
+  /campaigns:
+    get:
+      summary: /campaigns
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /campaigns
+      responses:
+        '200':
+          description: OK
+  /campaigns/{id}:
+    get:
+      summary: /campaigns/{id}
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: /campaigns/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /campaigns/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /campaigns/{id}
+      responses:
+        '200':
+          description: OK
+  /campaigns/{id}/activities:
+    get:
+      summary: /campaigns/{id}/activities
+      responses:
+        '200':
+          description: OK
+  /campaigns/{id}/analytics:
+    get:
+      summary: /campaigns/{id}/analytics
+      responses:
+        '200':
+          description: OK
+  /campaigns/{id}/execute:
+    post:
+      summary: /campaigns/{id}/execute
+      responses:
+        '200':
+          description: OK
+  /campaigns/{id}/template:
+    put:
+      summary: /campaigns/{id}/template
+      responses:
+        '200':
+          description: OK
+  /campaigns/analytics:
+    get:
+      summary: /campaigns/analytics
+      responses:
+        '200':
+          description: OK
+  /campaigns/executions:
+    get:
+      summary: /campaigns/executions
+      responses:
+        '200':
+          description: OK
+  /campaigns/executions/{executionId}/messages:
+    get:
+      summary: /campaigns/executions/{executionId}/messages
+      responses:
+        '200':
+          description: OK
+  /campaigns/render:
+    post:
+      summary: /campaigns/render
+      responses:
+        '200':
+          description: OK
+  /campaigns/smtp/readiness:
+    get:
+      summary: /campaigns/smtp/readiness
+      responses:
+        '200':
+          description: OK
+  /campaigns/summary:
+    get:
+      summary: /campaigns/summary
+      responses:
+        '200':
+          description: OK
+  /catalog:
+    get:
+      summary: /catalog
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /catalog
+      responses:
+        '200':
+          description: OK
+  /crm/auto-convert:
+    post:
+      summary: /crm/auto-convert
+      responses:
+        '200':
+          description: OK
+  /customers:
+    get:
+      summary: /customers
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /customers
+      responses:
+        '200':
+          description: OK
+  /customers/{id}:
+    get:
+      summary: /customers/{id}
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: /customers/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /customers/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /customers/{id}
+      responses:
+        '200':
+          description: OK
+  /customers/{id}/activities:
+    get:
+      summary: /customers/{id}/activities
+      responses:
+        '200':
+          description: OK
+  /customers/{id}/notes:
+    post:
+      summary: /customers/{id}/notes
+      responses:
+        '200':
+          description: OK
+  /customers/dashboard:
+    get:
+      summary: /customers/dashboard
+      responses:
+        '200':
+          description: OK
+  /dashboard/invoices:
+    get:
+      summary: /dashboard/invoices
+      responses:
+        '200':
+          description: OK
+  /dashboard/proposals:
+    get:
+      summary: /dashboard/proposals
+      responses:
+        '200':
+          description: OK
+  /global-search:
+    get:
+      summary: /global-search
+      responses:
+        '200':
+          description: OK
+  /growth-audit:
+    get:
+      summary: /growth-audit
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /growth-audit
+      responses:
+        '200':
+          description: OK
+  /growth/business-card:
+    get:
+      summary: /growth/business-card
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /growth/business-card
+      responses:
+        '200':
+          description: OK
+  /growth/business-card/{id}:
+    get:
+      summary: /growth/business-card/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /growth/business-card/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /growth/business-card/{id}
+      responses:
+        '200':
+          description: OK
+  /growth/business-card/{id}/publish:
+    post:
+      summary: /growth/business-card/{id}/publish
+      responses:
+        '200':
+          description: OK
+  /growth/reviews/campaigns:
+    get:
+      summary: /growth/reviews/campaigns
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /growth/reviews/campaigns
+      responses:
+        '200':
+          description: OK
+  /growth/reviews/campaigns/{id}:
+    get:
+      summary: /growth/reviews/campaigns/{id}
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: /growth/reviews/campaigns/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /growth/reviews/campaigns/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /growth/reviews/campaigns/{id}
+      responses:
+        '200':
+          description: OK
+  /growth/reviews/campaigns/{id}/requests:
+    get:
+      summary: /growth/reviews/campaigns/{id}/requests
+      responses:
+        '200':
+          description: OK
+  /growth/reviews/campaigns/{id}/send:
+    post:
+      summary: /growth/reviews/campaigns/{id}/send
+      responses:
+        '200':
+          description: OK
+  /growth/reviews/summary:
+    get:
+      summary: /growth/reviews/summary
+      responses:
+        '200':
+          description: OK
+  /health/live:
+    get:
+      summary: /health/live
+      responses:
+        '200':
+          description: OK
+  /health/ready:
+    get:
+      summary: /health/ready
+      responses:
+        '200':
+          description: OK
+  /invoices:
+    get:
+      summary: /invoices
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /invoices
+      responses:
+        '200':
+          description: OK
+  /invoices/{id}:
+    get:
+      summary: /invoices/{id}
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /invoices/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /invoices/{id}
+      responses:
+        '200':
+          description: OK
+  /invoices/{id}/duplicate:
+    post:
+      summary: /invoices/{id}/duplicate
+      responses:
+        '200':
+          description: OK
+  /invoices/{id}/email:
+    post:
+      summary: /invoices/{id}/email
+      responses:
+        '200':
+          description: OK
+  /invoices/{id}/history:
+    get:
+      summary: /invoices/{id}/history
+      responses:
+        '200':
+          description: OK
+  /lead-scoring/dashboard:
+    get:
+      summary: /lead-scoring/dashboard
+      responses:
+        '200':
+          description: OK
+  /lead-scoring/priority:
+    get:
+      summary: /lead-scoring/priority
+      responses:
+        '200':
+          description: OK
+  /lead-scoring/run:
+    post:
+      summary: /lead-scoring/run
+      responses:
+        '200':
+          description: OK
+  /leads/{id}:
+    get:
+      summary: /leads/{id}
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /leads/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /leads/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /leads/{id}
+      responses:
+        '200':
+          description: OK
+  /leads/{id}/attachments:
+    get:
+      summary: /leads/{id}/attachments
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /leads/{id}/attachments
+      responses:
+        '200':
+          description: OK
+  /leads/{id}/attachments/{attachmentId}:
+    get:
+      summary: /leads/{id}/attachments/{attachmentId}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /leads/{id}/attachments/{attachmentId}
+      responses:
+        '200':
+          description: OK
+  /leads/{id}/notes:
+    get:
+      summary: /leads/{id}/notes
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /leads/{id}/notes
+      responses:
+        '200':
+          description: OK
+  /leads/{id}/tasks:
+    get:
+      summary: /leads/{id}/tasks
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /leads/{id}/tasks
+      responses:
+        '200':
+          description: OK
+  /leads/{id}/timeline:
+    get:
+      summary: /leads/{id}/timeline
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/agents:
+    get:
+      summary: /marketing-engine/agents
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/analytics:
+    get:
+      summary: /marketing-engine/analytics
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/calendar:
+    get:
+      summary: /marketing-engine/calendar
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /marketing-engine/calendar
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /marketing-engine/calendar
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/config:
+    get:
+      summary: /marketing-engine/config
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /marketing-engine/config
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/content:
+    get:
+      summary: /marketing-engine/content
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/daily/run:
+    post:
+      summary: /marketing-engine/daily/run
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/leads/ingest:
+    post:
+      summary: /marketing-engine/leads/ingest
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/planner/run:
+    post:
+      summary: /marketing-engine/planner/run
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/publisher/run:
+    post:
+      summary: /marketing-engine/publisher/run
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/report:
+    get:
+      summary: /marketing-engine/report
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/research/run:
+    get:
+      summary: /marketing-engine/research/run
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /marketing-engine/research/run
+      responses:
+        '200':
+          description: OK
+  /marketing-engine/worker/run:
+    post:
+      summary: /marketing-engine/worker/run
+      responses:
+        '200':
+          description: OK
+  /marketing/leads:
+    post:
+      summary: /marketing/leads
+      responses:
+        '200':
+          description: OK
+  /media/upload:
+    post:
+      summary: /media/upload
+      responses:
+        '200':
+          description: OK
+  /metrics:
+    get:
+      summary: /metrics
+      responses:
+        '200':
+          description: OK
+  /mobile/home:
+    get:
+      summary: /mobile/home
+      responses:
+        '200':
+          description: OK
+  /mobile/lead-priority:
+    get:
+      summary: /mobile/lead-priority
+      responses:
+        '200':
+          description: OK
+  /mobile/qr:
+    get:
+      summary: /mobile/qr
+      responses:
+        '200':
+          description: OK
+  /mobile/qr/{id}/analytics:
+    get:
+      summary: /mobile/qr/{id}/analytics
+      responses:
+        '200':
+          description: OK
+  /mobile/qr/convert:
+    post:
+      summary: /mobile/qr/convert
+      responses:
+        '200':
+          description: OK
+  /mobile/qr/scan:
+    post:
+      summary: /mobile/qr/scan
+      responses:
+        '200':
+          description: OK
+  /mobile/reviews/submit:
+    post:
+      summary: /mobile/reviews/submit
+      responses:
+        '200':
+          description: OK
+  /mobile/reviews/summary:
+    get:
+      summary: /mobile/reviews/summary
+      responses:
+        '200':
+          description: OK
+  /mobile/summary:
+    get:
+      summary: /mobile/summary
+      responses:
+        '200':
+          description: OK
+  /notifications:
+    get:
+      summary: /notifications
+      responses:
+        '200':
+          description: OK
+  /notifications/{id}/read:
+    post:
+      summary: /notifications/{id}/read
+      responses:
+        '200':
+          description: OK
+  /onboarding/branding:
+    post:
+      summary: /onboarding/branding
+      responses:
+        '200':
+          description: OK
+  /onboarding/company:
+    post:
+      summary: /onboarding/company
+      responses:
+        '200':
+          description: OK
+  /onboarding/email:
+    get:
+      summary: /onboarding/email
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /onboarding/email
+      responses:
+        '200':
+          description: OK
+  /onboarding/progress:
+    get:
+      summary: /onboarding/progress
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /onboarding/progress
+      responses:
+        '200':
+          description: OK
+  /onboarding/status:
+    get:
+      summary: /onboarding/status
+      responses:
+        '200':
+          description: OK
+  /onboarding/team:
+    get:
+      summary: /onboarding/team
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /onboarding/team
+      responses:
+        '200':
+          description: OK
+  /onboarding/whatsapp:
+    get:
+      summary: /onboarding/whatsapp
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /onboarding/whatsapp
+      responses:
+        '200':
+          description: OK
+  /opportunities:
+    get:
+      summary: /opportunities
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /opportunities
+      responses:
+        '200':
+          description: OK
+  /opportunities/{id}:
+    get:
+      summary: /opportunities/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /opportunities/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /opportunities/{id}
+      responses:
+        '200':
+          description: OK
+  /opportunities/{id}/proposal:
+    post:
+      summary: /opportunities/{id}/proposal
+      responses:
+        '200':
+          description: OK
+  /opportunities/auto-create:
+    post:
+      summary: /opportunities/auto-create
+      responses:
+        '200':
+          description: OK
+  /opportunities/create:
+    post:
+      summary: /opportunities/create
+      responses:
+        '200':
+          description: OK
+  /opportunities/dashboard:
+    get:
+      summary: /opportunities/dashboard
+      responses:
+        '200':
+          description: OK
+  /opportunities/move:
+    post:
+      summary: /opportunities/move
+      responses:
+        '200':
+          description: OK
+  /opportunities/pipeline:
+    get:
+      summary: /opportunities/pipeline
+      responses:
+        '200':
+          description: OK
+  /opportunities/update-stage:
+    post:
+      summary: /opportunities/update-stage
+      responses:
+        '200':
+          description: OK
+  /opportunities/update-value:
+    post:
+      summary: /opportunities/update-value
+      responses:
+        '200':
+          description: OK
+  /outreach/email/send:
+    post:
+      summary: /outreach/email/send
+      responses:
+        '200':
+          description: OK
+  /outreach/email/summary:
+    get:
+      summary: /outreach/email/summary
+      responses:
+        '200':
+          description: OK
+  /partners:
+    get:
+      summary: /partners
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /partners
+      responses:
+        '200':
+          description: OK
+  /partners/{id}:
+    get:
+      summary: /partners/{id}
+      responses:
+        '200':
+          description: OK
+  /partners/{id}/approve:
+    post:
+      summary: /partners/{id}/approve
+      responses:
+        '200':
+          description: OK
+  /partners/commissions:
+    get:
+      summary: /partners/commissions
+      responses:
+        '200':
+          description: OK
+  /partners/dashboard:
+    get:
+      summary: /partners/dashboard
+      responses:
+        '200':
+          description: OK
+  /partners/payout:
+    post:
+      summary: /partners/payout
+      responses:
+        '200':
+          description: OK
+  /partners/referrals:
+    get:
+      summary: /partners/referrals
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /partners/referrals
+      responses:
+        '200':
+          description: OK
+  /payments:
+    get:
+      summary: /payments
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /payments
+      responses:
+        '200':
+          description: OK
+  /payments/capture:
+    post:
+      summary: /payments/capture
+      responses:
+        '200':
+          description: OK
+  /payments/create-order:
+    post:
+      summary: /payments/create-order
+      responses:
+        '200':
+          description: OK
+  /payments/mock:
+    post:
+      summary: /payments/mock
+      responses:
+        '200':
+          description: OK
+  /payments/refund:
+    post:
+      summary: /payments/refund
+      responses:
+        '200':
+          description: OK
+  /payments/verify:
+    post:
+      summary: /payments/verify
+      responses:
+        '200':
+          description: OK
+  /payments/webhook:
+    post:
+      summary: /payments/webhook
+      responses:
+        '200':
+          description: OK
+  /platform/ai-ops:
+    get:
+      summary: /platform/ai-ops
+      responses:
+        '200':
+          description: OK
+  /platform/ai-timeline:
+    get:
+      summary: /platform/ai-timeline
+      responses:
+        '200':
+          description: OK
+  /platform/events:
+    get:
+      summary: /platform/events
+      responses:
+        '200':
+          description: OK
+  /platform/events/analytics:
+    get:
+      summary: /platform/events/analytics
+      responses:
+        '200':
+          description: OK
+  /platform/events/dlq:
+    get:
+      summary: /platform/events/dlq
+      responses:
+        '200':
+          description: OK
+  /platform/events/dlq/{id}/ignore:
+    post:
+      summary: /platform/events/dlq/{id}/ignore
+      responses:
+        '200':
+          description: OK
+  /platform/events/dlq/{id}/retry:
+    post:
+      summary: /platform/events/dlq/{id}/retry
+      responses:
+        '200':
+          description: OK
+  /platform/events/metrics:
+    get:
+      summary: /platform/events/metrics
+      responses:
+        '200':
+          description: OK
+  /platform/events/registry:
+    get:
+      summary: /platform/events/registry
+      responses:
+        '200':
+          description: OK
+  /platform/events/replay:
+    get:
+      summary: /platform/events/replay
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /platform/events/replay
+      responses:
+        '200':
+          description: OK
+  /platform/health:
+    get:
+      summary: /platform/health
+      responses:
+        '200':
+          description: OK
+  /portal/auth/login:
+    post:
+      summary: /portal/auth/login
+      responses:
+        '200':
+          description: OK
+  /portal/auth/reset:
+    post:
+      summary: /portal/auth/reset
+      responses:
+        '200':
+          description: OK
+  /portal/invoices:
+    get:
+      summary: /portal/invoices
+      responses:
+        '200':
+          description: OK
+  /portal/notifications:
+    get:
+      summary: /portal/notifications
+      responses:
+        '200':
+          description: OK
+  /portal/payments:
+    get:
+      summary: /portal/payments
+      responses:
+        '200':
+          description: OK
+  /portal/profile:
+    get:
+      summary: /portal/profile
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /portal/profile
+      responses:
+        '200':
+          description: OK
+  /portal/subscriptions:
+    get:
+      summary: /portal/subscriptions
+      responses:
+        '200':
+          description: OK
+  /portal/tickets:
+    post:
+      summary: /portal/tickets
+      responses:
+        '200':
+          description: OK
+  /pricing/plans:
+    get:
+      summary: /pricing/plans
+      responses:
+        '200':
+          description: OK
+  /privacy/consent:
+    post:
+      summary: /privacy/consent
+      responses:
+        '200':
+          description: OK
+  /privacy/delete-request:
+    post:
+      summary: /privacy/delete-request
+      responses:
+        '200':
+          description: OK
+  /privacy/export:
+    get:
+      summary: /privacy/export
+      responses:
+        '200':
+          description: OK
+  /proposal-templates:
+    get:
+      summary: /proposal-templates
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /proposal-templates
+      responses:
+        '200':
+          description: OK
+  /proposals:
+    get:
+      summary: /proposals
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /proposals
+      responses:
+        '200':
+          description: OK
+  /proposals/{id}:
+    get:
+      summary: /proposals/{id}
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: /proposals/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /proposals/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /proposals/{id}
+      responses:
+        '200':
+          description: OK
+  /proposals/{id}/convert-to-invoice:
+    post:
+      summary: /proposals/{id}/convert-to-invoice
+      responses:
+        '200':
+          description: OK
+  /proposals/{id}/duplicate:
+    post:
+      summary: /proposals/{id}/duplicate
+      responses:
+        '200':
+          description: OK
+  /proposals/{id}/email:
+    post:
+      summary: /proposals/{id}/email
+      responses:
+        '200':
+          description: OK
+  /proposals/{id}/history:
+    get:
+      summary: /proposals/{id}/history
+      responses:
+        '200':
+          description: OK
+  /proposals/{id}/pdf:
+    get:
+      summary: /proposals/{id}/pdf
+      responses:
+        '200':
+          description: OK
+  /proposals/{id}/status:
+    post:
+      summary: /proposals/{id}/status
+      responses:
+        '200':
+          description: OK
+  /proposals/{id}/won:
+    post:
+      summary: /proposals/{id}/won
+      responses:
+        '200':
+          description: OK
+  /proposals/auto-generate:
+    post:
+      summary: /proposals/auto-generate
+      responses:
+        '200':
+          description: OK
+  /public/card/{slug}:
+    get:
+      summary: /public/card/{slug}
+      responses:
+        '200':
+          description: OK
+  /public/card/{slug}/click:
+    post:
+      summary: /public/card/{slug}/click
+      responses:
+        '200':
+          description: OK
+  /public/q/{code}:
+    get:
+      summary: /public/q/{code}
+      responses:
+        '200':
+          description: OK
+  /public/qr/{code}:
+    get:
+      summary: /public/qr/{code}
+      responses:
+        '200':
+          description: OK
+  /public/review/{token}:
+    get:
+      summary: /public/review/{token}
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /public/review/{token}
+      responses:
+        '200':
+          description: OK
+  /qr:
+    get:
+      summary: /qr
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /qr
+      responses:
+        '200':
+          description: OK
+  /qr/{id}:
+    get:
+      summary: /qr/{id}
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: /qr/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /qr/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /qr/{id}
+      responses:
+        '200':
+          description: OK
+  /qr/{id}/analytics:
+    get:
+      summary: /qr/{id}/analytics
+      responses:
+        '200':
+          description: OK
+  /qr/{id}/convert:
+    post:
+      summary: /qr/{id}/convert
+      responses:
+        '200':
+          description: OK
+  /qr/{id}/image:
+    get:
+      summary: /qr/{id}/image
+      responses:
+        '200':
+          description: OK
+  /qr/summary:
+    get:
+      summary: /qr/summary
+      responses:
+        '200':
+          description: OK
+  /recent-activities:
+    get:
+      summary: /recent-activities
+      responses:
+        '200':
+          description: OK
+  /retail/inventory:
+    get:
+      summary: /retail/inventory
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /retail/inventory
+      responses:
+        '200':
+          description: OK
+  /retail/inventory/{id}:
+    delete:
+      summary: /retail/inventory/{id}
+      responses:
+        '200':
+          description: OK
+  /retail/inventory/{id}/repredict:
+    post:
+      summary: /retail/inventory/{id}/repredict
+      responses:
+        '200':
+          description: OK
+  /retail/inventory/lookup:
+    get:
+      summary: /retail/inventory/lookup
+      responses:
+        '200':
+          description: OK
+  /retail/kpis:
+    get:
+      summary: /retail/kpis
+      responses:
+        '200':
+          description: OK
+  /retail/pos/checkout:
+    post:
+      summary: /retail/pos/checkout
+      responses:
+        '200':
+          description: OK
+  /retail/pos/payment-order:
+    post:
+      summary: /retail/pos/payment-order
+      responses:
+        '200':
+          description: OK
+  /retail/sales:
+    get:
+      summary: /retail/sales
+      responses:
+        '200':
+          description: OK
+  /retail/stores:
+    get:
+      summary: /retail/stores
+      responses:
+        '200':
+          description: OK
+  /revenue:
+    get:
+      summary: /revenue
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /revenue
+      responses:
+        '200':
+          description: OK
+  /revenue/admin-dashboard:
+    get:
+      summary: /revenue/admin-dashboard
+      responses:
+        '200':
+          description: OK
+  /revenue/by-customer:
+    get:
+      summary: /revenue/by-customer
+      responses:
+        '200':
+          description: OK
+  /revenue/by-product:
+    get:
+      summary: /revenue/by-product
+      responses:
+        '200':
+          description: OK
+  /revenue/by-source:
+    get:
+      summary: /revenue/by-source
+      responses:
+        '200':
+          description: OK
+  /revenue/dashboard:
+    get:
+      summary: /revenue/dashboard
+      responses:
+        '200':
+          description: OK
+  /revenue/export:
+    get:
+      summary: /revenue/export
+      responses:
+        '200':
+          description: OK
+  /revenue/forecast:
+    get:
+      summary: /revenue/forecast
+      responses:
+        '200':
+          description: OK
+  /revenue/metrics:
+    get:
+      summary: /revenue/metrics
+      responses:
+        '200':
+          description: OK
+  /revenue/summary:
+    get:
+      summary: /revenue/summary
+      responses:
+        '200':
+          description: OK
+  /revenue/trends:
+    get:
+      summary: /revenue/trends
+      responses:
+        '200':
+          description: OK
+  /sales/leads:
+    get:
+      summary: /sales/leads
+      responses:
+        '200':
+          description: OK
+  /sales/leads/bulk-workflow:
+    post:
+      summary: /sales/leads/bulk-workflow
+      responses:
+        '200':
+          description: OK
+  /sales/priority:
+    get:
+      summary: /sales/priority
+      responses:
+        '200':
+          description: OK
+  /sales/queue:
+    get:
+      summary: /sales/queue
+      responses:
+        '200':
+          description: OK
+  /sales/workload:
+    get:
+      summary: /sales/workload
+      responses:
+        '200':
+          description: OK
+  /scanner/auto/{resultId}:
+    post:
+      summary: /scanner/auto/{resultId}
+      responses:
+        '200':
+          description: OK
+  /scanner/convert/{resultId}:
+    post:
+      summary: /scanner/convert/{resultId}
+      responses:
+        '200':
+          description: OK
+  /scanner/jobs:
+    get:
+      summary: /scanner/jobs
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /scanner/jobs
+      responses:
+        '200':
+          description: OK
+  /scanner/jobs/{jobId}:
+    get:
+      summary: /scanner/jobs/{jobId}
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /scanner/jobs/{jobId}
+      responses:
+        '200':
+          description: OK
+  /scanner/pincode/{pin}:
+    get:
+      summary: /scanner/pincode/{pin}
+      responses:
+        '200':
+          description: OK
+  /scanner/readiness:
+    get:
+      summary: /scanner/readiness
+      responses:
+        '200':
+          description: OK
+  /scanner/results:
+    get:
+      summary: /scanner/results
+      responses:
+        '200':
+          description: OK
+  /scanner/results/{jobId}:
+    get:
+      summary: /scanner/results/{jobId}
+      responses:
+        '200':
+          description: OK
+  /scanner/summary:
+    get:
+      summary: /scanner/summary
+      responses:
+        '200':
+          description: OK
+  /settings/branding:
+    get:
+      summary: /settings/branding
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: /settings/branding
+      responses:
+        '200':
+          description: OK
+  /subscriptions:
+    get:
+      summary: /subscriptions
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /subscriptions
+      responses:
+        '200':
+          description: OK
+  /subscriptions/{id}:
+    get:
+      summary: /subscriptions/{id}
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: /subscriptions/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /subscriptions/{id}
+      responses:
+        '200':
+          description: OK
+  /subscriptions/{id}/actions:
+    post:
+      summary: /subscriptions/{id}/actions
+      responses:
+        '200':
+          description: OK
+  /subscriptions/create:
+    post:
+      summary: /subscriptions/create
+      responses:
+        '200':
+          description: OK
+  /subscriptions/metrics:
+    get:
+      summary: /subscriptions/metrics
+      responses:
+        '200':
+          description: OK
+  /templates/email:
+    get:
+      summary: /templates/email
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /templates/email
+      responses:
+        '200':
+          description: OK
+  /templates/email/{id}:
+    get:
+      summary: /templates/email/{id}
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: /templates/email/{id}
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: /templates/email/{id}
+      responses:
+        '200':
+          description: OK
+  /templates/email/summary:
+    get:
+      summary: /templates/email/summary
+      responses:
+        '200':
+          description: OK
+  /territories:
+    get:
+      summary: /territories
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /territories
+      responses:
+        '200':
+          description: OK
+  /territories/{id}:
+    patch:
+      summary: /territories/{id}
+      responses:
+        '200':
+          description: OK
+  /users/features:
+    get:
+      summary: /users/features
+      responses:
+        '200':
+          description: OK
+  /webhooks/razorpay:
+    post:
+      summary: /webhooks/razorpay
+      responses:
+        '200':
+          description: OK
+  /whatsapp/send-template:
+    post:
+      summary: /whatsapp/send-template
+      responses:
+        '200':
+          description: OK
+  /whatsapp/templates:
+    get:
+      summary: /whatsapp/templates
+      responses:
+        '200':
+          description: OK
+  /whatsapp/threads:
+    get:
+      summary: /whatsapp/threads
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /whatsapp/threads
+      responses:
+        '200':
+          description: OK
+  /whatsapp/threads/{id}:
+    get:
+      summary: /whatsapp/threads/{id}
+      responses:
+        '200':
+          description: OK
+  /whatsapp/threads/{id}/messages:
+    get:
+      summary: /whatsapp/threads/{id}/messages
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: /whatsapp/threads/{id}/messages
+      responses:
+        '200':
+          description: OK

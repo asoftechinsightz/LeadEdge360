@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-06-28T23:09:40.000Z",
+  "version": "v1.0.0-rc3-pilot",
+  "backup": null,
+  "migration": null,
+  "deploy": null,
+  "smoke": null,
+  "monitoring": null,
+  "cron": null,
+  "headers": null,
+  "markdownReport": "D:\\AsoftechInsightz_Project\\asoftech-insightz\\docs\\deployments\\PILOT_RC3_DEPLOYMENT_REPORT.md"
+}

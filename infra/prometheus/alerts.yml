@@ -1,0 +1,75 @@
+groups:
+  - name: asoftech-critical
+    rules:
+      - alert: AppNotReady
+        expr: up{job="asoftech-app"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Application metrics scrape failing
+          description: asoftech-app has been unreachable for 2 minutes.
+
+      - alert: HighErrorRate
+        expr: rate(asoftech_http_errors_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: API error rate above 5%
+
+      - alert: HighApiLatency
+        expr: histogram_quantile(0.95, rate(asoftech_http_request_duration_ms_bucket[5m])) > 300
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: API p95 latency above 300ms
+
+      - alert: LoginFailuresSpike
+        expr: increase(asoftech_login_failures_total[5m]) > 20
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Login failure spike detected
+
+      - alert: OtpFailuresSpike
+        expr: increase(asoftech_otp_failures_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: OTP failure spike detected
+
+      - alert: PaymentFailureRate
+        expr: rate(asoftech_payment_failures_total[15m]) / (rate(asoftech_payment_success_total[15m]) + rate(asoftech_payment_failures_total[15m]) + 0.001) > 0.05
+        for: 15m
+        labels:
+          severity: critical
+        annotations:
+          summary: Payment failure rate above 5%
+
+      - alert: WhatsAppDeliveryFailures
+        expr: increase(asoftech_whatsapp_failures_total[15m]) > 5
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: WhatsApp delivery failures elevated
+
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 0.2
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Disk space below 20%
+
+      - alert: MongoBackupStale
+        expr: time() - asoftech_last_backup_timestamp_seconds > 90000
+        for: 1h
+        labels:
+          severity: critical
+        annotations:
+          summary: MongoDB backup older than 25 hours

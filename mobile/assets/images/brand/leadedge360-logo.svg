@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" fill="none" role="img" aria-label="LeadEdge360">
+  <circle cx="28" cy="28" r="22" stroke="#0066FF" stroke-width="2.5" fill="#EFF6FF"/>
+  <rect x="18" y="34" width="5" height="10" rx="1" fill="#0066FF"/>
+  <rect x="25" y="30" width="5" height="14" rx="1" fill="#0066FF"/>
+  <rect x="32" y="26" width="5" height="18" rx="1" fill="#0066FF"/>
+  <path d="M14 36 L28 18 L42 30" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <text x="58" y="27" font-family="system-ui,Segoe UI,sans-serif" font-size="17" font-weight="700">
+    <tspan fill="#0F172A">Lead</tspan><tspan fill="#22C55E">Edge</tspan><tspan fill="#0F172A">360</tspan>
+  </text>
+  <text x="58" y="42" font-family="system-ui,Segoe UI,sans-serif" font-size="7" fill="#64748B" letter-spacing="0.08em">POWERED BY </text>
+  <text x="108" y="42" font-family="system-ui,Segoe UI,sans-serif" font-size="7" font-weight="600">
+    <tspan fill="#0F172A">Asoftech</tspan><tspan fill="#0066FF">Insightz</tspan>
+  </text>
+</svg>

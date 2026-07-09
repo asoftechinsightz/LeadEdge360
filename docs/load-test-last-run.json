@@ -1,0 +1,170 @@
+{
+  "generatedAt": "2026-06-28T23:03:40.828Z",
+  "baseUrl": "http://127.0.0.1:3000",
+  "targetConcurrentUsers": 1000,
+  "actualPeakVus": 50,
+  "durationSec": 5,
+  "reachable": false,
+  "scenarios": [
+    {
+      "name": "health_ready",
+      "path": "/api/health/ready",
+      "virtualUsers": 10,
+      "durationSec": 5,
+      "requests": 0,
+      "errors": 0,
+      "errorRate": 0,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "targetP95Ms": 100,
+      "pass": false,
+      "skipped": true,
+      "note": "Run on staging with LOAD_TEST_BASE_URL"
+    },
+    {
+      "name": "login",
+      "path": "/api/auth/login-password",
+      "virtualUsers": 5,
+      "durationSec": 5,
+      "requests": 0,
+      "errors": 0,
+      "errorRate": 0,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "targetP95Ms": 2000,
+      "pass": false,
+      "skipped": true,
+      "note": "Run on staging with LOAD_TEST_BASE_URL"
+    },
+    {
+      "name": "leads_list",
+      "path": "/api/leads?limit=20",
+      "virtualUsers": 13,
+      "durationSec": 5,
+      "requests": 0,
+      "errors": 0,
+      "errorRate": 0,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "targetP95Ms": 300,
+      "pass": false,
+      "skipped": true,
+      "note": "Run on staging with LOAD_TEST_BASE_URL"
+    },
+    {
+      "name": "opportunities",
+      "path": "/api/opportunities?limit=20",
+      "virtualUsers": 8,
+      "durationSec": 5,
+      "requests": 0,
+      "errors": 0,
+      "errorRate": 0,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "targetP95Ms": 300,
+      "pass": false,
+      "skipped": true,
+      "note": "Run on staging with LOAD_TEST_BASE_URL"
+    },
+    {
+      "name": "dashboard",
+      "path": "/api/revenue/dashboard",
+      "virtualUsers": 8,
+      "durationSec": 5,
+      "requests": 0,
+      "errors": 0,
+      "errorRate": 0,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "targetP95Ms": 500,
+      "pass": false,
+      "skipped": true,
+      "note": "Run on staging with LOAD_TEST_BASE_URL"
+    },
+    {
+      "name": "pos_checkout",
+      "path": "/api/retail/pos/checkout",
+      "virtualUsers": 3,
+      "durationSec": 5,
+      "requests": 0,
+      "errors": 0,
+      "errorRate": 0,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "targetP95Ms": 500,
+      "pass": false,
+      "skipped": true,
+      "note": "Run on staging with LOAD_TEST_BASE_URL"
+    },
+    {
+      "name": "whatsapp_templates",
+      "path": "/api/whatsapp/templates",
+      "virtualUsers": 3,
+      "durationSec": 5,
+      "requests": 0,
+      "errors": 0,
+      "errorRate": 0,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "targetP95Ms": 400,
+      "pass": false,
+      "skipped": true,
+      "note": "Run on staging with LOAD_TEST_BASE_URL"
+    },
+    {
+      "name": "barcode_lookup",
+      "path": "/api/retail/products?barcode=8900000000000",
+      "virtualUsers": 3,
+      "durationSec": 5,
+      "requests": 0,
+      "errors": 0,
+      "errorRate": 0,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "targetP95Ms": 300,
+      "pass": false,
+      "skipped": true,
+      "note": "Run on staging with LOAD_TEST_BASE_URL"
+    }
+  ],
+  "summary": {
+    "totalScenarios": 8,
+    "executed": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 8,
+    "meetsGaTarget": false
+  }
+}
