@@ -136,10 +136,4 @@ jobs:
           if [ -f /tmp/next.pid ]; then kill $(cat /tmp/next.pid) || true; fi
 
       - name: Final RC-2 gate
-        run: |
-          node -e "
-          const fs=require('fs');
-          const d=JSON.parse(fs.readFileSync('docs/releases/rc2-artifacts/rc2-results.json','utf8'));
-          const fail=d.summary.failedChecks>0 || d.build?.ok===false || d.docker?.ok===false || d.apiRegression?.ok===false;
-          if(fail) process.exit(1);
-          "
+        run: node scripts/rc2-final-gate.mjs
