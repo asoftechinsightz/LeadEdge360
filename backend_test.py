@@ -35,12 +35,66 @@ if not BASE_URL:
 
 print(f"Testing API at: {BASE_URL}\n")
 
+# Minimum leads created via POST before GET assertions (no server auto-seed).
+BOOTSTRAP_MIN_LEADS = 8
+
 # UUID v4 pattern
 UUID_PATTERN = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', re.I)
 
 def is_valid_uuid(s):
     """Check if string is a valid UUID v4"""
     return bool(UUID_PATTERN.match(str(s)))
+
+def bootstrap_demo_leads():
+    """Create demo leads via POST /api/leads (deterministic; no auto-seed dependency)."""
+    print("=" * 80)
+    print("BOOTSTRAP: POST /api/leads — seed data for regression")
+    print("=" * 80)
+    territories = [
+        'Bengaluru', 'Bengaluru', 'Bengaluru', 'Mumbai',
+        'Delhi NCR', 'Hyderabad', 'Chennai', 'Pune',
+    ]
+    created_ids = []
+    try:
+        for i in range(BOOTSTRAP_MIN_LEADS):
+            payload = {
+                'name': f'RC Bootstrap Lead {i + 1}',
+                'phone': f'+9198765{40000 + i:05d}',
+                'email': f'bootstrap{i + 1}@rc-test.example',
+                'company': 'RC Test Co',
+                'message': 'Bootstrap lead for API regression CI',
+                'budget': 50000 + (i * 1000),
+                'whatsapp': i % 2 == 0,
+                'source': 'website',
+                'territory': territories[i],
+            }
+            r = requests.post(f'{BASE_URL}/leads', json=payload, timeout=15)
+            if r.status_code != 201:
+                print(f"Status: {r.status_code}")
+                print(f"Response: {r.text}")
+                raise AssertionError(f'Bootstrap POST failed for lead {i + 1}')
+            lead = r.json().get('lead') or {}
+            lead_id = lead.get('id')
+            if not lead_id:
+                raise AssertionError('Bootstrap POST missing lead.id')
+            created_ids.append(lead_id)
+
+        # At least one Won lead for territory/status filter tests
+        won_id = created_ids[0]
+        r = requests.patch(
+            f'{BASE_URL}/leads/{won_id}',
+            json={'status': 'Won'},
+            timeout=10,
+        )
+        if r.status_code != 200:
+            print(f"PATCH Won status: {r.status_code} {r.text}")
+            raise AssertionError('Bootstrap PATCH to Won failed')
+
+        print(f"✅ Bootstrap: {len(created_ids)} leads created via POST (1 set to Won)\n")
+        return True, created_ids
+    except Exception as e:
+        print(f"❌ Bootstrap FAIL: {e}\n")
+        return False, created_ids
 
 def test_health_check():
     """Test 1: GET /api/ - health check"""
@@ -91,9 +145,9 @@ def test_get_agents():
         return False, []
 
 def test_get_leads_initial():
-    """Test 3: GET /api/leads - initial call (auto-seeds 8 demo leads)"""
+    """Test 3: GET /api/leads — list after bootstrap (POST-created data)."""
     print("=" * 80)
-    print("TEST 3: GET /api/leads - Initial Call (Auto-Seed)")
+    print("TEST 3: GET /api/leads - Initial List (POST bootstrap)")
     print("=" * 80)
     try:
         r = requests.get(f"{BASE_URL}/leads", timeout=10)
@@ -105,7 +159,9 @@ def test_get_leads_initial():
         leads = data['leads']
         print(f"Got {len(leads)} leads")
         
-        assert len(leads) >= 8, f"Expected at least 8 leads after auto-seed, got {len(leads)}"
+        assert len(leads) >= BOOTSTRAP_MIN_LEADS, (
+            f"Expected at least {BOOTSTRAP_MIN_LEADS} leads after bootstrap, got {len(leads)}"
+        )
         
         # Validate first lead structure
         if leads:
@@ -621,37 +677,73 @@ def main():
     success, agents = test_get_agents()
     results['get_agents'] = success
     
-    # Test 3: Get leads (auto-seed)
-    success, leads = test_get_leads_initial()
-    results['get_leads_initial'] = success
+    # Bootstrap: POST leads before GET list assertions (no auto-seed)
+    bootstrap_ok, bootstrap_ids = bootstrap_demo_leads()
+    results['bootstrap_leads'] = bootstrap_ok
+    if not bootstrap_ok:
+        print("⚠️  Skipping lead-dependent tests after bootstrap failure\n")
+    
+    # Test 3: Get leads (after bootstrap)
+    if bootstrap_ok:
+        success, leads = test_get_leads_initial()
+        results['get_leads_initial'] = success
+    else:
+        success, leads = False, []
+        results['get_leads_initial'] = False
     
     # Test 4-6: Filter tests
-    results['filter_territory'] = test_get_leads_filter_territory(leads)
-    results['filter_status'] = test_get_leads_filter_status(leads)
-    results['filter_agent'] = test_get_leads_filter_agent(leads)
+    if bootstrap_ok:
+        results['filter_territory'] = test_get_leads_filter_territory(leads)
+        results['filter_status'] = test_get_leads_filter_status(leads)
+        results['filter_agent'] = test_get_leads_filter_agent(leads)
+    else:
+        results['filter_territory'] = False
+        results['filter_status'] = False
+        results['filter_agent'] = False
     
-    # Test 7: Create lead (happy path)
-    success, lead_id = test_post_lead_happy_path()
-    results['post_lead_happy'] = success
+    # Test 7: Create lead (happy path) — separate ID for PATCH/rescore/delete
+    if bootstrap_ok:
+        success, lead_id = test_post_lead_happy_path()
+        results['post_lead_happy'] = success
+    else:
+        success, lead_id = False, None
+        results['post_lead_happy'] = False
     
     # Test 8: Validation tests
-    results['validation_missing_name'] = test_post_lead_validation_missing_name()
-    results['validation_missing_phone'] = test_post_lead_validation_missing_phone()
+    if bootstrap_ok:
+        results['validation_missing_name'] = test_post_lead_validation_missing_name()
+        results['validation_missing_phone'] = test_post_lead_validation_missing_phone()
+    else:
+        results['validation_missing_name'] = False
+        results['validation_missing_phone'] = False
     
-    # Test 9-10: Update lead
-    results['patch_valid_status'] = test_patch_lead_valid_status(lead_id)
-    results['patch_invalid_status'] = test_patch_lead_invalid_status(lead_id)
+    # Test 9-10: Update lead (uses lead_id from Test 7)
+    if bootstrap_ok:
+        results['patch_valid_status'] = test_patch_lead_valid_status(lead_id)
+        results['patch_invalid_status'] = test_patch_lead_invalid_status(lead_id)
+    else:
+        results['patch_valid_status'] = False
+        results['patch_invalid_status'] = False
     
     # Test 11: Rescore
-    results['rescore'] = test_post_rescore(lead_id)
+    if bootstrap_ok:
+        results['rescore'] = test_post_rescore(lead_id)
+    else:
+        results['rescore'] = False
     
     # Test 12: KPIs
-    results['get_kpis'] = test_get_kpis()
+    if bootstrap_ok:
+        results['get_kpis'] = test_get_kpis()
+    else:
+        results['get_kpis'] = False
     
-    # Test 13: Delete lead
-    results['delete_lead'] = test_delete_lead(lead_id)
+    # Test 13: Delete lead (Test 7 lead — bootstrap IDs retained in DB for filters)
+    if bootstrap_ok:
+        results['delete_lead'] = test_delete_lead(lead_id)
+    else:
+        results['delete_lead'] = False
     
-    # Test 14-15: Contact form
+    # Test 14-15: Contact form (no lead bootstrap dependency)
     results['contact_happy'] = test_post_contact_happy_path()
     results['contact_missing_email'] = test_post_contact_validation_missing_email()
     results['contact_missing_message'] = test_post_contact_validation_missing_message()
