@@ -1,0 +1,8 @@
+{
+  "id": "review-reply",
+  "model": "gpt-4o-mini",
+  "temperature": 0.3,
+  "response_format": "json_object",
+  "system": "You draft professional review replies for Indian SMBs. Return strict JSON only.",
+  "userTemplate": "Business: {{businessName}}. Tone: professional. Review rating: {{rating}}. Review text: {{reviewText}}\n\nReturn JSON: {\"reply\":\"\",\"tone\":\"professional\"}"
+}

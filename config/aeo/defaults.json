@@ -1,0 +1,14 @@
+{
+  "faqTarget": 5,
+  "completenessReminderThreshold": 60,
+  "aeoScoreAlertThreshold": 70,
+  "defaultTerritories": [
+    "Bengaluru",
+    "Mumbai",
+    "Delhi NCR",
+    "Hyderabad",
+    "Chennai",
+    "Pune"
+  ],
+  "llmCallsPerHour": 10
+}

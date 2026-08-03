@@ -1,0 +1,234 @@
+{
+  "certification": "RC-3",
+  "startedAt": "2026-08-03T17:29:32.801Z",
+  "finishedAt": "2026-08-03T17:29:45.219Z",
+  "ciEvidence": {
+    "workflow": "RC-2 Validation",
+    "workflowFile": ".github/workflows/rc-validation.yml",
+    "executedOn": "local-rc3-runner",
+    "githubActionsAvailable": false,
+    "note": "No git remote / gh auth on workstation; local memory-Mongo simulation of CI matrix."
+  },
+  "mongoUrl": "memory-server",
+  "dbName": "asoftech_saas_rc3",
+  "rcCiRunner": {
+    "ok": false,
+    "stderr": "(node:4832) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/ARNAV/Downloads/asoftech-insightz-v1.2.0/asoftech-insightz/lib/request-actor.js is not specified and it doesn't parse as CommonJS.\nReparsing as ES module because module syntax was detected. This incurs a performance overhead.\nTo eliminate this warning, add \"type\": \"module\" to \\\\?\\C:\\Users\\ARNAV\\Downloads\\asoftech-insightz-v1.2.0\\asoftech-insightz\\package.json.\n(Use `node --trace-warnings ...` to show where the warning was created)\nnode:internal/modules/esm/assert:88\r\n        throw new ERR_IMPORT_ATTRIBUTE_MISSING(url, 'type', validType);\r\n              ^\r\n\r\nTypeError [ERR_IMPORT_ATTRIBUTE_MISSING]: Module \"file:///C:/Users/ARNAV/Downloads/asoftech-insightz-v1.2.0/asoftech-insightz/config/aeo/readiness-checklist.json\" needs an import attribute of \"type: json\"\r\n    at validateAttributes (node:internal/modules/esm/assert:88:15)\r\n    at defaultLoadSync (node:internal/modules/esm/load:168:3)\r\n    at #loadAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:770:12)\r\n    at #loadSync (node:internal/modules/esm/loader:790:49)\r\n    at ModuleLoader.load (node:internal/modules/esm/loader:756:26)\r\n    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:488:31)\r\n    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:549:36)\r\n    at afterResolve (node:internal/modules/esm/loader:597:52)\r\n    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:603:12)\r\n    at ModuleJob.syncLink (node:internal/modules/esm/module_job:163:33) {\r\n  code: 'ERR_IMPORT_ATTRIBUTE_MISSING'\r\n}\r\n\r\nNode.js v24.16.0\r\n"
+  },
+  "scriptRuns": [
+    {
+      "name": "npm:test:aeo",
+      "ok": true
+    },
+    {
+      "name": "npm:test:bridge",
+      "ok": false,
+      "note": "Requires CI Mongo service"
+    },
+    {
+      "name": "npm:test:billing",
+      "ok": false,
+      "note": "Requires CI Mongo service"
+    }
+  ],
+  "suites": [
+    {
+      "name": "feature-flag-matrix",
+      "passed": 24,
+      "total": 24,
+      "failed": 0,
+      "checks": [
+        {
+          "label": "combo 1 E=false B=false A=false enforce flag",
+          "ok": true
+        },
+        {
+          "label": "combo 1 E=false B=false A=false bridge flag",
+          "ok": true
+        },
+        {
+          "label": "combo 1 E=false B=false A=false aeo flag",
+          "ok": true
+        },
+        {
+          "label": "combo 1 E=false B=false A=false followups cookie dispatch",
+          "ok": true
+        },
+        {
+          "label": "combo 1 E=false B=false A=false leads legacy",
+          "ok": true
+        },
+        {
+          "label": "combo 1 E=false B=false A=false jwt first",
+          "ok": true
+        },
+        {
+          "label": "combo 2 E=true B=false A=false enforce flag",
+          "ok": true
+        },
+        {
+          "label": "combo 2 E=true B=false A=false bridge flag",
+          "ok": true
+        },
+        {
+          "label": "combo 2 E=true B=false A=false aeo flag",
+          "ok": true
+        },
+        {
+          "label": "combo 2 E=true B=false A=false followups cookie dispatch",
+          "ok": true
+        },
+        {
+          "label": "combo 2 E=true B=false A=false leads legacy",
+          "ok": true
+        },
+        {
+          "label": "combo 2 E=true B=false A=false jwt first",
+          "ok": true
+        },
+        {
+          "label": "combo 3 E=true B=true A=false enforce flag",
+          "ok": true
+        },
+        {
+          "label": "combo 3 E=true B=true A=false bridge flag",
+          "ok": true
+        },
+        {
+          "label": "combo 3 E=true B=true A=false aeo flag",
+          "ok": true
+        },
+        {
+          "label": "combo 3 E=true B=true A=false followups cookie dispatch",
+          "ok": true
+        },
+        {
+          "label": "combo 3 E=true B=true A=false leads legacy",
+          "ok": true
+        },
+        {
+          "label": "combo 3 E=true B=true A=false jwt first",
+          "ok": true
+        },
+        {
+          "label": "combo 4 E=true B=true A=true enforce flag",
+          "ok": true
+        },
+        {
+          "label": "combo 4 E=true B=true A=true bridge flag",
+          "ok": true
+        },
+        {
+          "label": "combo 4 E=true B=true A=true aeo flag",
+          "ok": true
+        },
+        {
+          "label": "combo 4 E=true B=true A=true followups cookie dispatch",
+          "ok": true
+        },
+        {
+          "label": "combo 4 E=true B=true A=true leads legacy",
+          "ok": true
+        },
+        {
+          "label": "combo 4 E=true B=true A=true jwt first",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "deployment",
+      "passed": 15,
+      "total": 15,
+      "failed": 0,
+      "checks": [
+        {
+          "label": ".env.example exists",
+          "ok": true
+        },
+        {
+          "label": "env.example has MONGO_URL",
+          "ok": true
+        },
+        {
+          "label": "env.example has DB_NAME",
+          "ok": true
+        },
+        {
+          "label": "env.example has NEXT_PUBLIC_BASE_URL",
+          "ok": true
+        },
+        {
+          "label": "env.example has NEXT_PUBLIC_APP_URL",
+          "ok": true
+        },
+        {
+          "label": "env.example has ENFORCE_PLAN_LIMITS",
+          "ok": true
+        },
+        {
+          "label": "env.example has WEB_JWT_BRIDGE",
+          "ok": true
+        },
+        {
+          "label": "env.example has AEO_SERVER_PROFILE",
+          "ok": true
+        },
+        {
+          "label": "env.example has N8N_WEBHOOK_TOKEN",
+          "ok": true
+        },
+        {
+          "label": "Dockerfile exists",
+          "ok": true
+        },
+        {
+          "label": "docker-compose.yml exists",
+          "ok": true
+        },
+        {
+          "label": "next.config standalone",
+          "ok": true
+        },
+        {
+          "label": "docker compose config valid",
+          "ok": true
+        },
+        {
+          "label": "EMERGENT_LLM_KEY documented",
+          "ok": true
+        },
+        {
+          "label": "Razorpay keys documented",
+          "ok": true
+        }
+      ],
+      "integrationKeysPresent": [
+        "EMERGENT_LLM_KEY",
+        "EMERGENT_PROJECT_ID",
+        "EMERGENT_API_KEY",
+        "RAZORPAY_KEY_SECRET",
+        "NEXT_PUBLIC_RAZORPAY_KEY_ID"
+      ]
+    }
+  ],
+  "summary": {
+    "totalChecks": 42,
+    "passedChecks": 40,
+    "failedChecks": 2,
+    "passRatePct": 95.2
+  },
+  "build": {
+    "ok": false
+  },
+  "docker": {
+    "ok": false
+  },
+  "apiRegression": {
+    "ok": false
+  },
+  "bundle": {
+    "nextDirExists": true,
+    "nextTotalBytes": 0
+  }
+}

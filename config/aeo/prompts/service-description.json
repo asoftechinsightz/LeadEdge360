@@ -1,0 +1,8 @@
+{
+  "id": "service-description",
+  "model": "gpt-4o-mini",
+  "temperature": 0.3,
+  "response_format": "json_object",
+  "system": "You write service descriptions optimized for local search. Return strict JSON only.",
+  "userTemplate": "Write service descriptions for AEO. Business: {{profile}}\n\nReturn JSON: {\"short\":\"\",\"long\":\"\"}"
+}

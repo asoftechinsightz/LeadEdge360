@@ -1,0 +1,62 @@
+{
+  "name": "LeadEdge360 — AEO Review Reply Reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "hours", "hoursInterval": 24 }] }
+      },
+      "id": "DailyCron",
+      "name": "Daily 10:00 IST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.ASOFTECH_API}}/api/users/me",
+        "method": "GET",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "GetProfile",
+      "name": "GET users/me",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [440, 300],
+      "credentials": { "httpHeaderAuth": "LEADEDGE_ADMIN_JWT" }
+    },
+    {
+      "parameters": {
+        "jsCode": "const pending = $json.preferences?.aeoProfile?.reviews?.pendingReplies ?? 0;\nif (pending <= 0) return [];\nreturn [{ json: { pending, title: `Reply to ${pending} pending reviews`, dueAt: new Date(Date.now() + 12*3600*1000).toISOString() } }];"
+      },
+      "id": "CheckPending",
+      "name": "IF pending reviews",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.ASOFTECH_API}}/api/followups",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { title: $json.title, channel: 'whatsapp', dueAt: $json.dueAt, notes: 'AEO-REVIEW pending reply reminder' } }}"
+      },
+      "id": "CreateFollowup",
+      "name": "POST followup",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [880, 300],
+      "credentials": { "httpHeaderAuth": "LEADEDGE_ADMIN_JWT" }
+    }
+  ],
+  "connections": {
+    "Daily 10:00 IST": { "main": [[{ "node": "GET users/me", "type": "main", "index": 0 }]] },
+    "GET users/me": { "main": [[{ "node": "IF pending reviews", "type": "main", "index": 0 }]] },
+    "IF pending reviews": { "main": [[{ "node": "POST followup", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

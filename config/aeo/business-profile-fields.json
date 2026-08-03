@@ -1,0 +1,15 @@
+{
+  "fields": [
+    { "key": "businessName", "label": "Business name", "type": "text", "required": true },
+    { "key": "category", "label": "Category / industry", "type": "text", "required": true },
+    { "key": "descriptionShort", "label": "Short description", "type": "textarea", "maxLength": 160 },
+    { "key": "descriptionLong", "label": "Long description", "type": "textarea", "rows": 4 },
+    { "key": "phone", "label": "Phone", "type": "tel" },
+    { "key": "website", "label": "Website", "type": "url" },
+    { "key": "hours", "label": "Business hours", "type": "text" },
+    { "key": "gbpUrl", "label": "Google Business Profile URL (reference)", "type": "url" }
+  ],
+  "serviceAreasLabel": "Service areas",
+  "keywordsLabel": "Keywords (comma-separated)",
+  "faqsLabel": "FAQ pairs"
+}

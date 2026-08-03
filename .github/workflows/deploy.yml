@@ -1,0 +1,85 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+    env:
+      MONGO_URL: mongodb://localhost:27017
+      DB_NAME: asoftech_saas_ci
+      JWT_SECRET: ci-test-secret
+      N8N_WEBHOOK_TOKEN: ci-test-webhook-token
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: node scripts/rc-ci-runner.mjs
+
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install deps & lint
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+        env:
+          # Build-time placeholders so Next.js doesn't fail — real values are
+          # injected at runtime from the VPS .env file.
+          MONGO_URL: mongodb://localhost:27017
+          DB_NAME: asoftech_saas
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.PUBLIC_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.PUBLIC_URL }}
+
+      - name: Deploy over SSH (rsync + docker compose)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host:     ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key:      ${{ secrets.VPS_SSH_KEY }}
+          port:     ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            set -e
+            cd /opt/asoftech-insightz
+            git fetch --all
+            git reset --hard origin/main
+            # Re-write .env only for keys we manage in GitHub secrets.
+            # All other keys (Emergent, Razorpay, n8n) are preserved.
+            sudo tee /tmp/.env_overrides > /dev/null <<EOF
+            NEXT_PUBLIC_BASE_URL=${{ secrets.PUBLIC_URL }}
+            NEXT_PUBLIC_APP_URL=${{ secrets.PUBLIC_URL }}
+            EOF
+            # merge overrides into .env (overrides win)
+            awk -F= 'NR==FNR{a[$1]=$0;next} ($1 in a){print a[$1];delete a[$1];next} {print} END{for(k in a) print a[k]}' \
+              /tmp/.env_overrides .env > .env.new && sudo mv .env.new .env && sudo chmod 600 .env
+            docker compose pull
+            docker compose up -d --build --remove-orphans
+            docker image prune -f
+
+      - name: Smoke test
+        run: |
+          sleep 10
+          curl -fsS "${{ secrets.PUBLIC_URL }}/api/" | tee /dev/stderr | grep -q '"ok":true'

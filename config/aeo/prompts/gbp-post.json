@@ -1,0 +1,8 @@
+{
+  "id": "gbp-post",
+  "model": "gpt-4o-mini",
+  "temperature": 0.3,
+  "response_format": "json_object",
+  "system": "You write Google Business Profile posts for Indian SMBs. Return strict JSON only.",
+  "userTemplate": "Write a GBP post for this business. Profile: {{profile}}\n\nReturn JSON: {\"post\":\"\",\"hashtags\":[\"\"]}"
+}

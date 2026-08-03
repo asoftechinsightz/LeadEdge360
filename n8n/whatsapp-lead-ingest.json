@@ -1,0 +1,48 @@
+{
+  "name": "LeadEdge360 — WhatsApp Lead Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-incoming",
+        "responseMode": "onReceived"
+      },
+      "id": "WhatsAppWebhook",
+      "name": "WhatsApp Cloud API → webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalise WhatsApp Cloud API payload \u2192 LeadEdge360 shape\nconst body = items[0].json.body || items[0].json;\nconst msg = body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0] || {};\nconst contact = body?.entry?.[0]?.changes?.[0]?.value?.contacts?.[0] || {};\nreturn [{ json: {\n  name: contact?.profile?.name || 'WhatsApp Lead',\n  phone: msg.from || contact.wa_id,\n  message: msg?.text?.body || msg?.button?.text || '',\n  source: 'whatsapp',\n  whatsapp: true,\n  territory: 'Bengaluru',\n  orgId: $env.ASOFTECH_ORG_ID || 'demo-org',\n  meta: { wa_message_id: msg.id }\n}}];"
+      },
+      "id": "NormaliseWA",
+      "name": "Normalise payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.ASOFTECH_API}}/api/webhooks/whatsapp",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "X-Webhook-Token", "value": "={{$env.N8N_WEBHOOK_TOKEN}}" } ] }
+      },
+      "id": "POSTLead",
+      "name": "POST to AsoftechInsightz",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "WhatsApp Cloud API → webhook": { "main": [[{ "node": "Normalise payload", "type": "main", "index": 0 }]] },
+    "Normalise payload":               { "main": [[{ "node": "POST to AsoftechInsightz", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

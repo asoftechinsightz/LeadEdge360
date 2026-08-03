@@ -1,0 +1,62 @@
+{
+  "name": "LeadEdge360 — AEO FAQ Nudge",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "weeks", "weeksInterval": 2 }] }
+      },
+      "id": "BiWeeklyCron",
+      "name": "Bi-weekly",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.ASOFTECH_API}}/api/users/me",
+        "method": "GET",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth"
+      },
+      "id": "GetProfile",
+      "name": "GET users/me",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [440, 300],
+      "credentials": { "httpHeaderAuth": "LEADEDGE_ADMIN_JWT" }
+    },
+    {
+      "parameters": {
+        "jsCode": "const faqs = $json.preferences?.aeoProfile?.faqs || [];\nconst target = 5;\nconst gap = target - faqs.length;\nif (gap <= 0) return [];\nreturn [{ json: { gap, title: `Add ${gap} FAQs for AEO`, dueAt: new Date(Date.now() + 48*3600*1000).toISOString() } }];"
+      },
+      "id": "CheckFaqs",
+      "name": "IF faqCount < target",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.ASOFTECH_API}}/api/followups",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { title: $json.title, channel: 'other', dueAt: $json.dueAt, notes: 'Use in-app Suggest FAQs for LLM generation' } }}"
+      },
+      "id": "CreateFollowup",
+      "name": "POST followup",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [880, 300],
+      "credentials": { "httpHeaderAuth": "LEADEDGE_ADMIN_JWT" }
+    }
+  ],
+  "connections": {
+    "Bi-weekly": { "main": [[{ "node": "GET users/me", "type": "main", "index": 0 }]] },
+    "GET users/me": { "main": [[{ "node": "IF faqCount < target", "type": "main", "index": 0 }]] },
+    "IF faqCount < target": { "main": [[{ "node": "POST followup", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

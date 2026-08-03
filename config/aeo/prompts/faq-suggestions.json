@@ -1,0 +1,8 @@
+{
+  "id": "faq-suggestions",
+  "model": "gpt-4o-mini",
+  "temperature": 0.3,
+  "response_format": "json_object",
+  "system": "You are an AEO specialist for Indian SMBs. Return strict JSON only.",
+  "userTemplate": "Given this business profile, suggest 5 FAQ pairs optimized for Google AI Overviews and voice search. Return JSON: {\"faqs\":[{\"question\":\"\",\"answer\":\"\"}]}. Keep answers under 80 words.\n\nBusiness profile:\n{{profile}}"
+}

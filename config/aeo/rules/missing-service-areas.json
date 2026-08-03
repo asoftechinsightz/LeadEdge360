@@ -1,0 +1,6 @@
+{
+  "id": "aeo.areas.gap",
+  "compare": "serviceAreas vs kpis.byTerritory",
+  "recommendWhen": "serviceArea not in byTerritory OR byTerritory.leads === 0",
+  "messageTemplate": "Add {{area}} — {{leads}} leads in pipeline"
+}

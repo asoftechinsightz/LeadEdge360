@@ -1,0 +1,8 @@
+{
+  "id": "local-page",
+  "model": "gpt-4o-mini",
+  "temperature": 0.3,
+  "response_format": "json_object",
+  "system": "You write local landing page copy for Indian cities. Return strict JSON only.",
+  "userTemplate": "Write local page copy for territory {{territory}}. Business: {{profile}}\n\nReturn JSON: {\"headline\":\"\",\"body\":\"\",\"cta\":\"\"}"
+}

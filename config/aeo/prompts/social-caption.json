@@ -1,0 +1,8 @@
+{
+  "id": "social-caption",
+  "model": "gpt-4o-mini",
+  "temperature": 0.4,
+  "response_format": "json_object",
+  "system": "You write social media captions for Indian SMBs. Return strict JSON only.",
+  "userTemplate": "Write a social caption for this business. Profile: {{profile}}\n\nReturn JSON: {\"caption\":\"\",\"hashtags\":[\"\"]}"
+}

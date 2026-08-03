@@ -1,0 +1,8 @@
+{
+  "id": "description-improve",
+  "model": "gpt-4o-mini",
+  "temperature": 0.3,
+  "response_format": "json_object",
+  "system": "You improve business descriptions for answer-engine visibility. Return strict JSON only.",
+  "userTemplate": "Improve this business description for AEO. Category: {{category}}. Keywords: {{keywords}}. Current description: {{description}}\n\nReturn JSON: {\"short\":\"\",\"long\":\"\",\"changes\":[\"...\"]}"
+}

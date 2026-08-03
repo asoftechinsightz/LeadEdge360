@@ -1,0 +1,8 @@
+{
+  "id": "whatsapp-outreach",
+  "model": "gpt-4o-mini",
+  "temperature": 0.3,
+  "response_format": "json_object",
+  "system": "You write WhatsApp outreach messages for Indian SMBs. Return strict JSON only.",
+  "userTemplate": "Write a WhatsApp message for local outreach. Business: {{profile}}. Territory: {{territory}}\n\nReturn JSON: {\"message\":\"\"}"
+}

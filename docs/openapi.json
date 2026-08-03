@@ -1,0 +1,500 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AsoftechInsightz LeadEdge360 API",
+    "version": "1.0.0",
+    "description": "Production API surface for the AsoftechInsightz mobile applications (iOS + Android) and 3rd-party integrations. All endpoints are tenant-scoped via JWT.\n\n**Base URL (prod):** `https://app.asoftechinsightz.com/api`\n**Auth:** Bearer JWT in `Authorization` header (obtained via `/auth/login-password` or `/auth/verify-otp`).\n**Refresh:** `/auth/refresh-token` with a refresh-token cookie or body.\n\nAll responses use `application/json`. Errors follow [RFC-7807 problem+json](https://www.rfc-editor.org/rfc/rfc7807). See `docs/error-codes.md` for the full code matrix.",
+    "contact": { "email": "enquiry@asoftechinsightz.com", "name": "AsoftechInsightz API team" },
+    "license": { "name": "Proprietary" }
+  },
+  "servers": [
+    { "url": "https://app.asoftechinsightz.com/api", "description": "Production" },
+    { "url": "https://qualify-leads-hub.preview.emergentagent.com/api", "description": "Demo / preview" },
+    { "url": "http://localhost:3000/api", "description": "Local development" }
+  ],
+  "tags": [
+    { "name": "Auth",           "description": "Registration, OTP, login, password reset, token refresh" },
+    { "name": "Users",          "description": "Profile, password, subscription details" },
+    { "name": "Leads",          "description": "CRUD + assignment, status, scoring, search, sources" },
+    { "name": "FollowUps",      "description": "Lead-level follow-ups & reminders" },
+    { "name": "Dashboard",      "description": "KPIs, revenue & sales performance" },
+    { "name": "WhatsApp",       "description": "Outbound messaging + conversation history" },
+    { "name": "Notifications",  "description": "Push / Email / WhatsApp / In-app" },
+    { "name": "Admin",          "description": "User, role, subscription, product-access management" },
+    { "name": "Webhooks",       "description": "Inbound integrations (Razorpay, n8n)" }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code":    { "type": "string", "example": "AUTH_INVALID_CREDENTIALS" },
+          "message": { "type": "string", "example": "Email or password is incorrect." },
+          "details": { "type": "object" },
+          "traceId": { "type": "string" }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "properties": {
+          "page":     { "type": "integer", "example": 1 },
+          "pageSize": { "type": "integer", "example": 20 },
+          "total":    { "type": "integer", "example": 134 },
+          "hasMore":  { "type": "boolean" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id":              { "type": "string", "format": "uuid" },
+          "tenantId":        { "type": "string", "format": "uuid" },
+          "email":           { "type": "string", "format": "email" },
+          "phone":           { "type": "string", "example": "+919812345678" },
+          "fullName":        { "type": "string" },
+          "picture":         { "type": "string", "format": "uri" },
+          "role":            { "type": "string", "enum": ["superadmin","admin","manager","agent"] },
+          "status":          { "type": "string", "enum": ["active","invited","suspended","deleted"] },
+          "emailVerified":   { "type": "boolean" },
+          "phoneVerified":   { "type": "boolean" },
+          "preferences":     { "type": "object" },
+          "createdAt":       { "type": "string", "format": "date-time" }
+        }
+      },
+      "AuthTokens": {
+        "type": "object",
+        "required": ["accessToken","refreshToken","user"],
+        "properties": {
+          "accessToken":  { "type": "string", "description": "JWT, ~15 min TTL" },
+          "refreshToken": { "type": "string", "description": "Opaque, ~30 day TTL" },
+          "expiresIn":    { "type": "integer", "example": 900 },
+          "tokenType":    { "type": "string", "example": "Bearer" },
+          "user":         { "$ref": "#/components/schemas/User" }
+        }
+      },
+      "LeadInput": {
+        "type": "object",
+        "required": ["name","phone"],
+        "properties": {
+          "name":     { "type": "string", "example": "Rahul Verma" },
+          "email":    { "type": "string", "format": "email" },
+          "phone":    { "type": "string", "example": "+919812345671" },
+          "company":  { "type": "string" },
+          "message":  { "type": "string" },
+          "source":   { "type": "string", "enum": ["website","facebook","google","whatsapp","referral","manual"] },
+          "territory":{ "type": "string", "example": "Bengaluru" },
+          "budget":   { "type": "number" },
+          "whatsappOptIn": { "type": "boolean" }
+        }
+      },
+      "Lead": {
+        "allOf": [
+          { "$ref": "#/components/schemas/LeadInput" },
+          {
+            "type": "object",
+            "properties": {
+              "id":            { "type": "string", "format": "uuid" },
+              "tenantId":      { "type": "string", "format": "uuid" },
+              "score":         { "type": "integer", "minimum": 0, "maximum": 100 },
+              "label":         { "type": "string", "enum": ["Hot","Warm","Cold"] },
+              "scoringReasons":{ "type": "array", "items": { "type": "string" } },
+              "scoringEngine": { "type": "string", "enum": ["llm","rules","rules-fallback"] },
+              "status":        { "type": "string", "enum": ["New","Contacted","Qualified","Proposal","Won","Lost"] },
+              "assignedToId":  { "type": "string", "format": "uuid" },
+              "assignedToName":{ "type": "string" },
+              "nextFollowupAt":{ "type": "string", "format": "date-time" },
+              "createdAt":     { "type": "string", "format": "date-time" },
+              "updatedAt":     { "type": "string", "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "FollowUpInput": {
+        "type": "object",
+        "required": ["leadId","title","dueAt"],
+        "properties": {
+          "leadId":  { "type": "string", "format": "uuid" },
+          "title":   { "type": "string", "example": "Demo call follow-up" },
+          "notes":   { "type": "string" },
+          "dueAt":   { "type": "string", "format": "date-time" },
+          "channel": { "type": "string", "enum": ["call","whatsapp","email","meeting","other"] },
+          "assignedToId": { "type": "string", "format": "uuid" }
+        }
+      },
+      "FollowUp": {
+        "allOf": [
+          { "$ref": "#/components/schemas/FollowUpInput" },
+          {
+            "type": "object",
+            "properties": {
+              "id":      { "type": "string", "format": "uuid" },
+              "status":  { "type": "string", "enum": ["open","done","cancelled","overdue"] },
+              "outcome": { "type": "string" },
+              "reminderSent": { "type": "boolean" },
+              "closedAt":     { "type": "string", "format": "date-time" },
+              "createdAt":    { "type": "string", "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id":       { "type": "string", "format": "uuid" },
+          "channel":  { "type": "string", "enum": ["push","email","whatsapp","inapp"] },
+          "type":     { "type": "string", "example": "followup_due" },
+          "title":    { "type": "string" },
+          "body":     { "type": "string" },
+          "payload":  { "type": "object" },
+          "readAt":   { "type": "string", "format": "date-time", "nullable": true },
+          "createdAt":{ "type": "string", "format": "date-time" }
+        }
+      },
+      "Subscription": {
+        "type": "object",
+        "properties": {
+          "id":          { "type": "string", "format": "uuid" },
+          "productCode": { "type": "string", "example": "leadedge360" },
+          "planCode":    { "type": "string", "example": "growth" },
+          "status":      { "type": "string", "enum": ["trialing","active","past_due","cancelled","expired"] },
+          "currentEnd":  { "type": "string", "format": "date-time" },
+          "limits":      { "type": "object" }
+        }
+      },
+      "WhatsAppMessage": {
+        "type": "object",
+        "properties": {
+          "id":           { "type": "string", "format": "uuid" },
+          "leadId":       { "type": "string", "format": "uuid" },
+          "direction":    { "type": "string", "enum": ["inbound","outbound"] },
+          "msgType":      { "type": "string", "enum": ["text","template","image","document","audio","interactive"] },
+          "templateName": { "type": "string" },
+          "body":         { "type": "string" },
+          "status":       { "type": "string", "enum": ["queued","sent","delivered","read","failed"] },
+          "createdAt":    { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "parameters": {
+      "PageParam":      { "name": "page",     "in": "query", "schema": { "type": "integer", "default": 1 } },
+      "PageSizeParam":  { "name": "pageSize", "in": "query", "schema": { "type": "integer", "default": 20, "maximum": 100 } },
+      "SearchParam":    { "name": "q",        "in": "query", "schema": { "type": "string" }, "description": "Free-text search across name / email / phone / company" }
+    },
+    "responses": {
+      "Unauthorized": { "description": "Missing or invalid token", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "Forbidden":    { "description": "Permission denied",          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "NotFound":     { "description": "Resource not found",         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "BadRequest":   { "description": "Validation failed",          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+    }
+  },
+  "security": [{ "BearerAuth": [] }],
+  "paths": {
+    "/": {
+      "get": { "tags": ["Auth"], "summary": "Health check", "security": [], "responses": { "200": { "description": "OK" } } }
+    },
+
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"], "security": [], "summary": "Register a new user (initiates phone+email verification)",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": {
+          "type":"object",
+          "required":["email","phone","password","fullName","dpdpConsent"],
+          "properties":{
+            "email":        { "type":"string","format":"email" },
+            "phone":        { "type":"string","example":"+919812345678" },
+            "password":     { "type":"string","format":"password","minLength":8 },
+            "fullName":     { "type":"string" },
+            "tenantName":   { "type":"string","description":"Optional — if omitted a personal workspace is created." },
+            "dpdpConsent":  { "type":"object","properties":{ "essential":{"type":"boolean"},"analytics":{"type":"boolean"},"marketing":{"type":"boolean"} } }
+          }
+        }}}},
+        "responses": {
+          "201": { "description":"User created. OTPs sent to phone & email.", "content":{"application/json":{"schema":{"type":"object","properties":{"userId":{"type":"string"},"otpSent":{"type":"boolean"}}}}} },
+          "400": { "$ref":"#/components/responses/BadRequest" },
+          "409": { "description":"Email / phone already in use" }
+        }
+      }
+    },
+    "/auth/verify-otp": {
+      "post": {
+        "tags":["Auth"],"security":[],"summary":"Verify SMS OTP for signup / phone-verification / login / password-reset",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{
+          "type":"object","required":["destination","code","purpose"],
+          "properties":{
+            "destination":{"type":"string","example":"+919812345678"},
+            "code":{"type":"string","example":"487612"},
+            "purpose":{"type":"string","enum":["signup","login","verify","reset"]}
+          }
+        }}}},
+        "responses":{
+          "200":{ "description":"OTP valid. Returns tokens if purpose=login.","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthTokens"}}}},
+          "400":{ "$ref":"#/components/responses/BadRequest" }
+        }
+      }
+    },
+    "/auth/verify-email": {
+      "post":{
+        "tags":["Auth"],"security":[],"summary":"Verify email via signed token from the verification e-mail",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["token"],"properties":{"token":{"type":"string"}}}}}},
+        "responses":{"200":{"description":"Email verified"},"400":{"$ref":"#/components/responses/BadRequest"}}
+      }
+    },
+    "/auth/login-otp": {
+      "post":{
+        "tags":["Auth"],"security":[],"summary":"Request OTP to log in by phone",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["phone"],"properties":{"phone":{"type":"string"}}}}}},
+        "responses":{"200":{"description":"OTP sent"},"404":{"description":"Phone not registered"}}
+      }
+    },
+    "/auth/login-password": {
+      "post":{
+        "tags":["Auth"],"security":[],"summary":"Log in via email + password",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{
+          "type":"object","required":["email","password"],
+          "properties":{"email":{"type":"string"},"password":{"type":"string"},"device":{"type":"string"}}
+        }}}},
+        "responses":{
+          "200":{ "description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthTokens"}}}},
+          "401":{ "$ref":"#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post":{
+        "tags":["Auth"],"security":[],"summary":"Send reset code (SMS OTP) to phone or email",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["destination"],"properties":{"destination":{"type":"string","description":"email or phone"}}}}}},
+        "responses":{"200":{"description":"OTP sent"}}
+      }
+    },
+    "/auth/reset-password": {
+      "post":{
+        "tags":["Auth"],"security":[],"summary":"Reset password using verified OTP",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{
+          "type":"object","required":["destination","code","newPassword"],
+          "properties":{"destination":{"type":"string"},"code":{"type":"string"},"newPassword":{"type":"string","minLength":8}}
+        }}}},
+        "responses":{"200":{"description":"Password updated"},"400":{"$ref":"#/components/responses/BadRequest"}}
+      }
+    },
+    "/auth/refresh-token": {
+      "post":{
+        "tags":["Auth"],"security":[],"summary":"Exchange refresh-token for a new access-token",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["refreshToken"],"properties":{"refreshToken":{"type":"string"}}}}}},
+        "responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthTokens"}}}},
+                     "401":{"$ref":"#/components/responses/Unauthorized"}}
+      }
+    },
+    "/auth/logout": {
+      "post":{ "tags":["Auth"],"summary":"Revoke current refresh-token & clear cookie", "responses":{"200":{"description":"OK"}} }
+    },
+
+    "/users/me": {
+      "get":   { "tags":["Users"],"summary":"My profile", "responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/User"}}}}} },
+      "patch": {
+        "tags":["Users"],"summary":"Update my profile (full name, picture, phone, preferences)",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{
+          "fullName":{"type":"string"},"picture":{"type":"string"},"phone":{"type":"string"},"preferences":{"type":"object"}
+        }}}}},
+        "responses":{"200":{"description":"OK"}}
+      }
+    },
+    "/users/change-password": {
+      "post":{
+        "tags":["Users"],"summary":"Change my password",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["currentPassword","newPassword"],
+          "properties":{"currentPassword":{"type":"string"},"newPassword":{"type":"string","minLength":8}}}}}},
+        "responses":{"200":{"description":"OK"},"401":{"$ref":"#/components/responses/Unauthorized"}}
+      }
+    },
+    "/users/subscription": {
+      "get":{ "tags":["Users"],"summary":"My subscription", "responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Subscription"}}}}}}
+    },
+
+    "/leads": {
+      "get": {
+        "tags":["Leads"],"summary":"List leads with search & filters",
+        "parameters":[
+          { "$ref":"#/components/parameters/PageParam" },
+          { "$ref":"#/components/parameters/PageSizeParam" },
+          { "$ref":"#/components/parameters/SearchParam" },
+          { "name":"status",     "in":"query", "schema":{ "type":"string" } },
+          { "name":"label",      "in":"query", "schema":{ "type":"string", "enum":["Hot","Warm","Cold"] } },
+          { "name":"source",     "in":"query", "schema":{ "type":"string" } },
+          { "name":"territory",  "in":"query", "schema":{ "type":"string" } },
+          { "name":"assignedTo", "in":"query", "schema":{ "type":"string" } },
+          { "name":"createdFrom","in":"query", "schema":{ "type":"string", "format":"date" } },
+          { "name":"createdTo",  "in":"query", "schema":{ "type":"string", "format":"date" } },
+          { "name":"sort",       "in":"query", "schema":{ "type":"string", "example":"-createdAt" } }
+        ],
+        "responses": { "200":{ "description":"OK", "content":{"application/json":{"schema":{
+          "type":"object","properties":{
+            "leads":{"type":"array","items":{"$ref":"#/components/schemas/Lead"}},
+            "meta":{ "$ref":"#/components/schemas/PaginationMeta" }
+          }
+        }}}}}
+      },
+      "post": {
+        "tags":["Leads"],"summary":"Create lead (auto-scores with AI + auto-assigns by territory)",
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/LeadInput"}}}},
+        "responses":{"201":{"description":"Created","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Lead"}}}},"400":{"$ref":"#/components/responses/BadRequest"}}
+      }
+    },
+    "/leads/{id}": {
+      "parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],
+      "get":   { "tags":["Leads"],"summary":"Lead details (includes activity timeline & followups)",
+                 "responses":{"200":{"description":"OK"},"404":{"$ref":"#/components/responses/NotFound"}}},
+      "patch": { "tags":["Leads"],"summary":"Update lead",
+                 "requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/LeadInput"}}}},
+                 "responses":{"200":{"description":"OK"}}},
+      "delete":{ "tags":["Leads"],"summary":"Delete lead","responses":{"200":{"description":"OK"}}}
+    },
+    "/leads/{id}/assign": {
+      "post":{
+        "tags":["Leads"],"summary":"Assign lead to a user",
+        "parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["userId"],"properties":{"userId":{"type":"string"}}}}}},
+        "responses":{"200":{"description":"OK"}}
+      }
+    },
+    "/leads/{id}/status": {
+      "post":{
+        "tags":["Leads"],"summary":"Update lead status",
+        "parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],
+        "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["status"],"properties":{"status":{"type":"string","enum":["New","Contacted","Qualified","Proposal","Won","Lost"]},"reason":{"type":"string"}}}}}},
+        "responses":{"200":{"description":"OK"}}
+      }
+    },
+    "/leads/{id}/rescore": {
+      "post":{ "tags":["Leads"],"summary":"Re-run AI scoring",
+               "parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],
+               "responses":{"200":{"description":"OK"}}}
+    },
+    "/leads/sources": {
+      "get":{ "tags":["Leads"],"summary":"List lead sources","responses":{"200":{"description":"OK"}}},
+      "post":{ "tags":["Leads"],"summary":"Create source",
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["code","name"],"properties":{"code":{"type":"string"},"name":{"type":"string"},"enabled":{"type":"boolean"}}}}}},
+               "responses":{"201":{"description":"Created"}}}
+    },
+
+    "/followups": {
+      "get":{
+        "tags":["FollowUps"],"summary":"List follow-ups",
+        "parameters":[
+          { "$ref":"#/components/parameters/PageParam" },
+          { "$ref":"#/components/parameters/PageSizeParam" },
+          { "name":"status",     "in":"query","schema":{ "type":"string","enum":["open","done","cancelled","overdue"] } },
+          { "name":"assignedTo", "in":"query","schema":{ "type":"string" } },
+          { "name":"dueFrom",    "in":"query","schema":{ "type":"string","format":"date-time" } },
+          { "name":"dueTo",      "in":"query","schema":{ "type":"string","format":"date-time" } }
+        ],
+        "responses":{"200":{"description":"OK"}}
+      },
+      "post":{ "tags":["FollowUps"],"summary":"Create follow-up",
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/FollowUpInput"}}}},
+               "responses":{"201":{"description":"Created"}}}
+    },
+    "/followups/{id}": {
+      "patch": { "tags":["FollowUps"],"summary":"Update follow-up","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK"}} },
+      "delete":{ "tags":["FollowUps"],"summary":"Cancel follow-up","parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK"}} }
+    },
+    "/followups/{id}/close": {
+      "post":{ "tags":["FollowUps"],"summary":"Close follow-up with outcome",
+               "parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["outcome"],"properties":{"outcome":{"type":"string"}}}}}},
+               "responses":{"200":{"description":"OK"}}}
+    },
+    "/followups/reminders": {
+      "get":{ "tags":["FollowUps"],"summary":"List follow-ups due in next N hours (default 24h)",
+              "parameters":[{"name":"withinHours","in":"query","schema":{"type":"integer","default":24}}],
+              "responses":{"200":{"description":"OK"}}}
+    },
+
+    "/dashboard/kpis": {
+      "get":{ "tags":["Dashboard"],"summary":"Totals — leads, qualified, won, lost, hot, conversion%, avg score",
+              "responses":{"200":{"description":"OK"}}}
+    },
+    "/dashboard/followups-due": {
+      "get":{ "tags":["Dashboard"],"summary":"Follow-ups due today / overdue","responses":{"200":{"description":"OK"}}}
+    },
+    "/dashboard/revenue": {
+      "get":{ "tags":["Dashboard"],"summary":"Revenue (Won leads x avg deal-size) over time",
+              "parameters":[{"name":"range","in":"query","schema":{"type":"string","enum":["7d","30d","90d","ytd"]}}],
+              "responses":{"200":{"description":"OK"}}}
+    },
+    "/dashboard/sales-performance": {
+      "get":{ "tags":["Dashboard"],"summary":"Per-user / per-territory leaderboard","responses":{"200":{"description":"OK"}}}
+    },
+
+    "/whatsapp/send": {
+      "post":{ "tags":["WhatsApp"],"summary":"Send a free-form WhatsApp message (within 24h window)",
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["leadId","text"],"properties":{"leadId":{"type":"string"},"text":{"type":"string"}}}}}},
+               "responses":{"201":{"description":"Queued","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WhatsAppMessage"}}}}}}
+    },
+    "/whatsapp/send-template": {
+      "post":{ "tags":["WhatsApp"],"summary":"Send a pre-approved WhatsApp template",
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["leadId","templateName"],"properties":{"leadId":{"type":"string"},"templateName":{"type":"string"},"params":{"type":"array","items":{"type":"string"}}}}}}},
+               "responses":{"201":{"description":"Queued"}}}
+    },
+    "/whatsapp/conversation/{leadId}": {
+      "get":{ "tags":["WhatsApp"],"summary":"Full WhatsApp conversation for a lead",
+              "parameters":[{"name":"leadId","in":"path","required":true,"schema":{"type":"string"}}],
+              "responses":{"200":{"description":"OK","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/WhatsAppMessage"}}}}}}}
+    },
+
+    "/notifications": {
+      "get":{ "tags":["Notifications"],"summary":"List notifications (newest first)",
+              "parameters":[{"name":"unreadOnly","in":"query","schema":{"type":"boolean"}}],
+              "responses":{"200":{"description":"OK"}}}
+    },
+    "/notifications/{id}/read": {
+      "post":{ "tags":["Notifications"],"summary":"Mark notification as read",
+               "parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],
+               "responses":{"200":{"description":"OK"}}}
+    },
+    "/notifications/devices": {
+      "post":{ "tags":["Notifications"],"summary":"Register push device (FCM/APNs token)",
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["platform","token"],"properties":{"platform":{"type":"string","enum":["ios","android","web"]},"token":{"type":"string"},"deviceName":{"type":"string"}}}}}},
+               "responses":{"201":{"description":"Registered"}}}
+    },
+    "/notifications/settings": {
+      "get":  { "tags":["Notifications"],"summary":"Per-channel preferences","responses":{"200":{"description":"OK"}} },
+      "patch":{ "tags":["Notifications"],"summary":"Update preferences","responses":{"200":{"description":"OK"}} }
+    },
+
+    "/admin/users": {
+      "get":{ "tags":["Admin"],"summary":"List users in tenant","responses":{"200":{"description":"OK"}}},
+      "post":{ "tags":["Admin"],"summary":"Invite new user",
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["email","role"],"properties":{"email":{"type":"string"},"fullName":{"type":"string"},"role":{"type":"string"}}}}}},
+               "responses":{"201":{"description":"Invited"}}}
+    },
+    "/admin/users/{id}": {
+      "parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],
+      "patch":{ "tags":["Admin"],"summary":"Update user (role, status, etc.)","responses":{"200":{"description":"OK"}}},
+      "delete":{ "tags":["Admin"],"summary":"Deactivate user","responses":{"200":{"description":"OK"}}}
+    },
+    "/admin/roles": {
+      "get": { "tags":["Admin"],"summary":"List roles + permissions","responses":{"200":{"description":"OK"}} },
+      "post":{ "tags":["Admin"],"summary":"Create custom role","responses":{"201":{"description":"Created"}}}
+    },
+    "/admin/subscriptions": {
+      "get":{ "tags":["Admin"],"summary":"List tenant subscriptions","responses":{"200":{"description":"OK"}}},
+      "post":{ "tags":["Admin"],"summary":"Create / upgrade subscription via Razorpay",
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["planId"],"properties":{"planId":{"type":"string"}}}}}},
+               "responses":{"201":{"description":"Order created"}}}
+    },
+    "/admin/product-access": {
+      "get":{ "tags":["Admin"],"summary":"View product enablement for tenant","responses":{"200":{"description":"OK"}}},
+      "post":{ "tags":["Admin"],"summary":"Toggle product access",
+               "requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["productCode","enabled"],"properties":{"productCode":{"type":"string"},"enabled":{"type":"boolean"}}}}}},
+               "responses":{"200":{"description":"OK"}}}
+    },
+
+    "/webhooks/whatsapp": { "post":{ "tags":["Webhooks"],"security":[],"summary":"Inbound WhatsApp lead/message (from n8n)","responses":{"201":{"description":"OK"}}} },
+    "/webhooks/facebook": { "post":{ "tags":["Webhooks"],"security":[],"summary":"Inbound Facebook lead (from n8n)","responses":{"201":{"description":"OK"}}} },
+    "/webhooks/google":   { "post":{ "tags":["Webhooks"],"security":[],"summary":"Inbound Google lead (from n8n)","responses":{"201":{"description":"OK"}}} },
+    "/webhooks/razorpay": { "post":{ "tags":["Webhooks"],"security":[],"summary":"Payment events (order.paid, payment.captured)","responses":{"200":{"description":"OK"}}} }
+  }
+}

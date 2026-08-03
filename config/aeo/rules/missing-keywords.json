@@ -1,0 +1,18 @@
+{
+  "id": "aeo.keywords.gap",
+  "seedKeywords": [
+    "demo",
+    "pricing",
+    "quote",
+    "urgent",
+    "buy",
+    "trial",
+    "budget",
+    "whatsapp",
+    "local",
+    "near me",
+    "service",
+    "consultation"
+  ],
+  "messageTemplate": "Add keyword \"{{keyword}}\" to your description for better AEO coverage"
+}

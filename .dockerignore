@@ -1,0 +1,16 @@
+.git
+node_modules
+.next
+.env
+.env.local
+yarn-error.log
+npm-debug.log
+Readme.md
+README.md
+Dockerfile
+docker-compose.yml
+tests
+test_result.md
+test_reports
+.vscode
+.idea

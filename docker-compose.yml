@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: .
+    container_name: asoftech-app
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      - MONGO_URL=mongodb://mongo:27017
+      - DB_NAME=asoftech_saas
+    depends_on:
+      - mongo
+    restart: always
+
+  mongo:
+    image: mongo:7
+    container_name: asoftech-mongo
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: asoftech-n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:?Set N8N_BASIC_AUTH_PASSWORD in .env}
+      - GENERIC_TIMEZONE=Asia/Kolkata
+      - WEBHOOK_URL=${N8N_WEBHOOK_URL:-http://localhost:5678/}
+    volumes:
+      - n8n-data:/home/node/.n8n
+    restart: always
+
+volumes:
+  mongo-data: {}
+  n8n-data: {}

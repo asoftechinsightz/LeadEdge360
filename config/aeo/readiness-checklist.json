@@ -1,0 +1,67 @@
+{
+  "items": [
+    {
+      "id": "description",
+      "label": "Long description ≥ 150 characters",
+      "weight": 15,
+      "field": "descriptionLong",
+      "minLength": 150
+    },
+    {
+      "id": "serviceAreas",
+      "label": "At least 3 service areas",
+      "weight": 15,
+      "field": "serviceAreas",
+      "minCount": 3
+    },
+    {
+      "id": "faqs",
+      "label": "At least 5 FAQ pairs",
+      "weight": 15,
+      "field": "faqs",
+      "minCount": 5
+    },
+    {
+      "id": "phone",
+      "label": "Phone number present",
+      "weight": 10,
+      "field": "phone",
+      "required": true
+    },
+    {
+      "id": "website",
+      "label": "Website URL present",
+      "weight": 10,
+      "field": "website",
+      "required": true
+    },
+    {
+      "id": "whatsapp",
+      "label": "WhatsApp messaging configured",
+      "weight": 10,
+      "field": "whatsappConfigured",
+      "required": true
+    },
+    {
+      "id": "googleLead",
+      "label": "At least 1 Google-sourced lead",
+      "weight": 10,
+      "kpiField": "googleLeads",
+      "minValue": 1
+    },
+    {
+      "id": "category",
+      "label": "Business category defined",
+      "weight": 10,
+      "field": "category",
+      "required": true
+    },
+    {
+      "id": "keywords",
+      "label": "At least 5 keywords",
+      "weight": 5,
+      "field": "keywords",
+      "minCount": 5
+    }
+  ]
+}

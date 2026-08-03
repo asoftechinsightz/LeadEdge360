@@ -1,0 +1,48 @@
+{
+  "name": "LeadEdge360 — Facebook Lead Ads Ingest",
+  "nodes": [
+    {
+      "parameters": {
+        "trigger": "leadgen",
+        "page": "={{$env.FB_PAGE_ID}}"
+      },
+      "id": "FBLead",
+      "name": "Facebook Lead Ads Trigger",
+      "type": "n8n-nodes-base.facebookLeadAdsTrigger",
+      "typeVersion": 1,
+      "position": [220, 300],
+      "credentials": { "facebookGraphApi": "FB_GRAPH_API_CRED" }
+    },
+    {
+      "parameters": {
+        "jsCode": "const f = items[0].json.field_data || [];\nconst pick = (k) => (f.find(x => x.name === k)?.values?.[0]) || '';\nreturn [{ json: {\n  name: pick('full_name') || pick('name'),\n  email: pick('email'),\n  phone: pick('phone_number') || pick('phone'),\n  company: pick('company_name') || '',\n  message: pick('what_brings_you_here') || pick('message') || '',\n  source: 'facebook',\n  whatsapp: false,\n  territory: pick('city') || 'Bengaluru',\n  orgId: $env.ASOFTECH_ORG_ID || 'demo-org'\n}}];"
+      },
+      "id": "NormaliseFB",
+      "name": "Normalise FB lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.ASOFTECH_API}}/api/webhooks/facebook",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "X-Webhook-Token", "value": "={{$env.N8N_WEBHOOK_TOKEN}}" } ] }
+      },
+      "id": "POSTLead",
+      "name": "POST to AsoftechInsightz",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Facebook Lead Ads Trigger": { "main": [[{ "node": "Normalise FB lead", "type": "main", "index": 0 }]] },
+    "Normalise FB lead":        { "main": [[{ "node": "POST to AsoftechInsightz", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}
