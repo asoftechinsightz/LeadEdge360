@@ -69,7 +69,13 @@ jobs:
         run: node scripts/rc2-append-results.mjs --build-fail
 
       - name: Docker image build
-        run: docker build -t asoftech-rc2:ci .
+        run: |
+          docker build -t asoftech-rc2:ci . \
+            --build-arg MONGO_URL=mongodb://localhost:27017 \
+            --build-arg DB_NAME=asoftech_saas_rc2 \
+            --build-arg NEXT_PUBLIC_BASE_URL=http://localhost:3000 \
+            --build-arg NEXT_PUBLIC_APP_URL=http://localhost:3000 \
+            --build-arg JWT_SECRET=rc2-test-secret
 
       - name: Record docker success
         if: success()
