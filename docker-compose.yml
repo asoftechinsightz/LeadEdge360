@@ -1,29 +1,41 @@
-version: "3.9"
+# LeadEdge360 Sprint-1 production stack (/opt/asoftech-insightz)
+# Joins external asoftech_edge so asoftech-edge-nginx resolves app:3000 and n8n:5678 via Docker DNS.
+
 services:
   app:
     build:
       context: .
+    image: asoftech-insightz-app
     container_name: asoftech-app
     ports:
       - "3000:3000"
     env_file: .env
     environment:
-      # Docker injects HOSTNAME=<container id> at runtime, which overrides image ENV.
-      # Next.js standalone server.js uses HOSTNAME for server.listen(); when it equals
-      # the container hostname, Node binds only to the first /etc/hosts IP (default network),
-      # so edge nginx on asoftech_edge cannot reach app:3000. Force bind-all-interfaces.
+      # Docker injects HOSTNAME=<container id>, which breaks multi-network bind (see EDGE_502 RCA).
       HOSTNAME: "0.0.0.0"
       PORT: "3000"
       MONGO_URL: mongodb://mongo:27017
       DB_NAME: asoftech_saas
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     restart: always
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "node -e \"require('http').get('http://127.0.0.1:3000/api',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))\"",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
     networks:
       default:
       asoftech_edge:
         aliases:
           - app
+          - asoftech-app
 
   mongo:
     image: mongo:7
@@ -31,6 +43,12 @@ services:
     volumes:
       - mongo-data:/data/db
     restart: always
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   n8n:
     image: n8nio/n8n:latest
@@ -46,6 +64,11 @@ services:
     volumes:
       - n8n-data:/home/node/.n8n
     restart: always
+    networks:
+      default:
+      asoftech_edge:
+        aliases:
+          - n8n
 
 networks:
   asoftech_edge:

@@ -1,0 +1,31 @@
+# Reference edge stack — live copy: /opt/asoftech-edge on leadedge360 VPS
+# Sole publisher of host :80 / :443. Upstreams use Docker DNS on asoftech_edge.
+
+services:
+  edge-nginx:
+    image: nginx:1.27-alpine
+    container_name: asoftech-edge-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./map.conf:/etc/nginx/conf.d/00-map.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+    networks:
+      - asoftech_edge
+      - opsedge360_default
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://app:3000/api | grep -q '\"ok\":true'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  asoftech_edge:
+    external: true
+  opsedge360_default:
+    external: true
