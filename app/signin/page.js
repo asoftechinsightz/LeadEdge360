@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import Link from 'next/link'
 import SiteShell from '@/components/site/SiteShell'
 import { Card, CardContent } from '@/components/ui/card'
@@ -101,10 +101,33 @@ function Line({ text }) {
 }
 
 function Consent({ checked, onChange, children }) {
+  const id = useId()
+  const labelId = `${id}-label`
   return (
-    <label className="flex items-start gap-3 cursor-pointer">
-      <Checkbox checked={checked} onCheckedChange={onChange} className="mt-0.5" />
-      <span className="text-sm text-muted-foreground leading-relaxed">{children}</span>
-    </label>
+    <div className="flex items-start gap-3">
+      <Checkbox
+        id={id}
+        checked={checked}
+        onCheckedChange={onChange}
+        className="mt-0.5"
+        aria-labelledby={labelId}
+      />
+      <div
+        id={labelId}
+        className="text-sm text-muted-foreground leading-relaxed cursor-pointer"
+        onClick={(e) => {
+          if (e.target.closest('a')) return
+          onChange(!checked)
+        }}
+        onKeyDown={(e) => {
+          if (e.key !== 'Enter' && e.key !== ' ') return
+          if (e.target.closest('a')) return
+          e.preventDefault()
+          onChange(!checked)
+        }}
+      >
+        {children}
+      </div>
+    </div>
   )
 }
