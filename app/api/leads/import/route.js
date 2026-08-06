@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid'
 import { getDb } from '@/lib/mongo'
 import { guardCrmRequest, crmError } from '@/lib/crm/api-helpers'
 import { aiScore } from '@/lib/scoring'
-import { guardFeatureSoft, blockedBySoftGate, respondSoftGate } from '@/lib/subscription/gate'
+import { guardFeatureSoft, blockedBySoftGate, respondSoftGate } from '@/lib/subscription/server'
 
 function parseCsvLine(line) {
   const result = []

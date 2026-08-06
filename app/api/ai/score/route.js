@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { getDb } from '@/lib/mongo'
 import { guardAiRequest, aiError } from '@/lib/ai/api-helpers'
 import { scoreLeadForOrg } from '@/lib/ai/service'
-import { blockedBySoftGate, respondSoftGate } from '@/lib/subscription/gate'
+import { blockedBySoftGate, respondSoftGate } from '@/lib/subscription/server'
 
 export async function POST(req) {
   try {

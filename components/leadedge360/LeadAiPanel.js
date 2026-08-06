@@ -41,16 +41,16 @@ export function LeadAiPanel({ leadId, lead, onScored }) {
       toast.success(`${result.closeProbability ?? result.score}% chance to close (${result.label})`)
     },
     onError: (err) => {
-      const error = err as { message?: string; locked?: boolean; upgradeUrl?: string; code?: string }
-      if (error.locked || error.code === 'FEATURE_LOCKED') {
+      const error = err || {}
+      if (error?.locked || error?.code === 'FEATURE_LOCKED') {
         toast.error('Upgrade to unlock AI scoring', {
-          action: error.upgradeUrl
-            ? { label: 'Upgrade', onClick: () => { window.location.href = error.upgradeUrl! } }
+          action: error?.upgradeUrl
+            ? { label: 'Upgrade', onClick: () => { window.location.href = error.upgradeUrl } }
             : undefined,
         })
         return
       }
-      toast.error(err.message || 'Scoring failed')
+      toast.error(err?.message || 'Scoring failed')
     },
   })
 

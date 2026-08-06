@@ -5,7 +5,7 @@ import { getDb } from '@/lib/mongo'
 import { guardCrmRequest, crmError } from '@/lib/api/route-guards'
 import { findLeadById } from '@/lib/leads/service'
 import { sendLeadWhatsAppIntro } from '@/lib/whatsapp-service'
-import { guardFeatureSoft, blockedBySoftGate, respondSoftGate } from '@/lib/subscription/gate'
+import { guardFeatureSoft, blockedBySoftGate, respondSoftGate } from '@/lib/subscription/server'
 
 export async function POST(req, { params }) {
   try {

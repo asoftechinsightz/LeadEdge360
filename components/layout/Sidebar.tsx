@@ -35,7 +35,7 @@ import { Button } from '@/components/design-system/core/Button'
 import { Badge } from '@/components/design-system/core/Badge'
 import { SuiteBrandLogo } from '@/components/brand/SuiteBrandLogo'
 import { useOrgFeatures } from '@/hooks/useFeatureFlag'
-import { UPGRADE_URL } from '@/lib/subscription/gate'
+import { UPGRADE_URL } from '@/lib/subscription/constants'
 import GetStartedChecklist from '@/components/onboarding/GetStartedChecklist'
 
 export type LeadEdgeNavItem = {
